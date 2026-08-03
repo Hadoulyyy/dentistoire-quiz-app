@@ -60,7 +60,7 @@ body {
   flex-direction: column;
 }
 
-/* NAVBAR HEADER - EXACT MATCH FOR SCREENSHOT 2 */
+/* NAVBAR HEADER */
 header {
   position: sticky;
   top: 0;
@@ -93,7 +93,6 @@ header {
   letter-spacing: 1.5px;
 }
 
-/* CLEAN SERIF NAVBAR LINKS - SMALL DELICATE FONT SIZE MATCHING SCREENSHOT 2 */
 .nav-tabs {
   display: flex;
   align-items: center;
@@ -283,13 +282,20 @@ main {
   display: flex;
   justify-content: center;
   align-items: center;
+  position: relative;
 }
 
+/* SEAMLESS WATERCOLOR BLEND FOR BUNNY ILLUSTRATION MATCHING USER SCREENSHOT */
 .hero-bunny-illustration {
   width: 100%;
-  max-width: 460px;
+  max-width: 480px;
   height: auto;
   display: block;
+  mix-blend-mode: multiply;
+  filter: contrast(102%) brightness(99%);
+  border-radius: 0;
+  box-shadow: none;
+  background: transparent;
 }
 
 /* BOTTOM FEATURE BANNER CARD (4 COLUMNS) */
