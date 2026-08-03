@@ -1,0 +1,564 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DENTISTOIRE - 2nd Year Dental Quiz Platform</title>
+  <meta name="description" content="A soft and inspiring space for second-year dental students to learn, practice quizzes, and master all 7 subjects.">
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500;1,600&family=Quicksand:wght@500;600;700&family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
+
+  <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <!-- HEADER NAVBAR WITH STUDENT AUTH & TABS -->
+  <header>
+    <div class="header-container">
+      <div class="brand" id="brand-home-click">
+        <div class="brand-title" style="font-size: 1.6rem; letter-spacing: 2px;">DENTISTOIRE</div>
+      </div>
+
+      <nav class="nav-tabs" role="tablist">
+        <button class="tab-btn active" data-tab="home-tab" id="nav-home">
+          <span data-i18n="navHome">Home</span>
+        </button>
+        <button class="tab-btn" data-tab="subjects-tab" id="nav-subjects">
+          <span data-i18n="navSubjects">Subjects</span>
+        </button>
+        <button class="tab-btn" data-tab="saved-tab" id="nav-saved">
+          <span data-i18n="navSaved">Saved & Weak</span> (<span id="saved-count-badge">0</span>)
+        </button>
+        <button class="tab-btn" data-tab="history-tab" id="nav-history">
+          <span data-i18n="navHistory">History</span>
+        </button>
+        <button class="tab-btn" data-tab="analytics-tab" id="nav-analytics">
+          <span data-i18n="navAnalytics">Analytics</span>
+        </button>
+        <button class="tab-btn" data-tab="admin-tab" id="nav-admin">
+          <span data-i18n="navAdmin">Admin Hub</span>
+        </button>
+      </nav>
+
+      <div class="header-actions">
+        <button class="user-profile-badge" id="btn-open-auth" title="Student Account Login / Sign Up">
+          <i class="fa-solid fa-user-graduate" style="color: var(--accent-primary);"></i>
+          <span id="header-user-name">Login / Sign Up</span>
+        </button>
+        <button class="lang-btn" id="lang-toggle-btn" title="Toggle English / Arabic">
+          <span>العربية</span> <i class="fa-solid fa-language"></i>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- MAIN APP CONTAINER -->
+  <main>
+
+    <!-- HOME TAB -->
+    <section id="home-tab" class="tab-content active">
+      
+      <!-- HERO BANNER -->
+      <div class="dentistoire-hero-container">
+        <!-- LEFT COLUMN: TYPOGRAPHY & BUTTONS -->
+        <div class="hero-left-col">
+          <div class="hero-bienvenue">Bienvenue chez</div>
+          <h1 class="hero-dentistoire-title">DENTISTOIRE</h1>
+          
+          <div class="hero-heart-divider">
+            <i class="fa-solid fa-heart"></i>
+          </div>
+
+          <div class="hero-tagline">Learn. Understand. Smile.</div>
+          <p class="hero-description">
+            A soft and inspiring space for 2nd-year dental students to study lecture materials, master 7 course subjects, and make every smile shine.
+          </p>
+
+          <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
+            <button class="btn-discover-services" id="btn-discover-services">
+              <i class="fa-solid fa-tooth"></i> DISCOVER OUR COURSES
+            </button>
+            <button class="btn-secondary" id="btn-random-quiz" style="padding: 0.8rem 1.6rem; font-family: var(--font-serif); font-size: 1rem; font-weight: 600;">
+              <i class="fa-solid fa-play"></i> QUICK PRACTICE
+            </button>
+          </div>
+        </div>
+
+        <!-- RIGHT COLUMN: EMBEDDED BUNNY HERO IMAGE -->
+        <div class="hero-right-col">
+          <img src="dentistoire_bunny.png" alt="Dentistoire Bunny Hero" class="hero-bunny-illustration" id="hero-bunny-img">
+        </div>
+      </div>
+
+      <!-- BOTTOM FEATURE BANNER CARD (4 COLUMNS) -->
+      <div class="dentistoire-banner-card">
+        <div class="banner-col">
+          <div class="banner-icon"><i class="fa-solid fa-book-open"></i></div>
+          <div>
+            <div class="banner-title">LEARN</div>
+            <div class="banner-text">Lecture sheets, notes, and study materials for your 7 courses.</div>
+          </div>
+        </div>
+
+        <div class="banner-col">
+          <div class="banner-icon"><i class="fa-solid fa-tooth"></i></div>
+          <div>
+            <div class="banner-title">QUIZZES</div>
+            <div class="banner-text">Multiple choice, True/False, and exam practice questions.</div>
+          </div>
+        </div>
+
+        <div class="banner-col">
+          <div class="banner-icon"><i class="fa-solid fa-heart"></i></div>
+          <div>
+            <div class="banner-title">REVISION</div>
+            <div class="banner-text">Save difficult questions and review your weak topics.</div>
+          </div>
+        </div>
+
+        <div class="banner-col">
+          <div class="banner-icon"><i class="fa-solid fa-seedling"></i></div>
+          <div>
+            <div class="banner-title">ANALYTICS</div>
+            <div class="banner-text">Track accuracy, study streaks, and exam readiness.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- FOOTER FLOURISH -->
+      <div class="dentistoire-footer-flourish">
+        <i class="fa-solid fa-sparkles"></i> <i class="fa-solid fa-tooth"></i> <i class="fa-solid fa-sparkles"></i>
+      </div>
+
+      <!-- 7 DENTAL SUBJECT QUIZZES SECTION -->
+      <div class="section-header" id="subjects-anchor" style="margin-top: 1rem;">
+        <div class="section-title">
+          <i class="fa-solid fa-tooth" style="color: var(--accent-primary);"></i> <span>2nd Year Dental Course Quizzes (7 Subjects)</span>
+        </div>
+        <div style="display: flex; gap: 0.75rem;">
+          <button class="btn-primary" id="btn-practice-weak-top"><i class="fa-solid fa-bolt"></i> Practice Weak Topics</button>
+        </div>
+      </div>
+
+      <!-- GLOBAL SEARCH BAR -->
+      <div class="search-container">
+        <i class="fa-solid fa-magnifying-glass search-icon"></i>
+        <input type="text" id="global-search-input" class="search-input" data-i18n-placeholder="searchPlaceholder" placeholder="Search questions, subjects, topics, or keywords...">
+      </div>
+
+      <!-- SEARCH RESULTS CONTAINER -->
+      <div id="search-results-section" style="display: none; margin-bottom: 2.5rem;">
+        <div class="section-header">
+          <h3 class="section-title"><i class="fa-solid fa-list-check"></i> Search Results (<span id="search-count">0</span>)</h3>
+          <button class="btn-secondary" id="btn-clear-search">Clear Search</button>
+        </div>
+        <div id="search-results-list" style="display: flex; flex-direction: column; gap: 1rem;"></div>
+      </div>
+
+      <!-- SUBJECTS GRID -->
+      <div class="subject-grid" id="subjects-grid">
+        <!-- Rendered dynamically by app.js -->
+      </div>
+    </section>
+
+    <!-- SUBJECT EXPLORER & SHEET VIEW -->
+    <section id="subjects-tab" class="tab-content">
+      <div class="section-header">
+        <div>
+          <button class="btn-secondary" id="btn-back-subjects-list" style="margin-bottom: 0.5rem; display: none;">
+            <i class="fa-solid fa-arrow-left"></i> All Subjects
+          </button>
+          <h2 class="section-title" id="subject-explorer-title"><i class="fa-solid fa-book"></i> Subjects Library</h2>
+        </div>
+      </div>
+
+      <div id="subject-explorer-content">
+        <!-- Rendered dynamically by app.js -->
+      </div>
+    </section>
+
+    <!-- QUIZ ENGINE VIEW -->
+    <section id="quiz-tab" class="tab-content">
+      <div class="quiz-container">
+        <!-- Quiz Top Header -->
+        <div class="quiz-header">
+          <div>
+            <h3 id="quiz-title-display" style="font-family: var(--font-serif); font-size: 1.5rem;">Dental Quiz</h3>
+            <div style="font-size: 0.85rem; color: var(--text-muted);" id="quiz-progress-text">Question 1 of 10</div>
+          </div>
+
+          <div style="display: flex; align-items: center; gap: 0.75rem;">
+            <div class="quiz-timer-badge" id="quiz-timer-container" style="display: none;">
+              <i class="fa-regular fa-clock"></i> <span id="quiz-timer-text">05:00</span>
+            </div>
+            <button class="btn-secondary" id="btn-open-palette" title="Question Navigator">
+              <i class="fa-solid fa-border-all"></i> <span data-i18n="questionPaletteBtn">Navigator</span>
+            </button>
+            <button class="btn-secondary" id="btn-exit-quiz">
+              <i class="fa-solid fa-xmark"></i> <span data-i18n="btnExitQuiz">Exit Quiz</span>
+            </button>
+          </div>
+        </div>
+
+        <div class="progress-bar-container">
+          <div class="progress-bar-fill" id="quiz-progress-fill"></div>
+        </div>
+
+        <!-- Question Card -->
+        <div class="question-card" id="quiz-question-card">
+          <button class="bookmark-star-btn" id="btn-bookmark-current" title="Save question for revision">
+            <i class="fa-regular fa-star"></i>
+          </button>
+
+          <div class="question-meta-bar">
+            <span class="meta-badge" id="meta-badge-type">MCQ</span>
+            <span class="meta-badge" id="meta-badge-topic">Topic</span>
+            <span class="meta-badge" id="meta-badge-difficulty">Medium</span>
+            <span class="meta-badge" id="meta-badge-year" style="display: none;">2024 Exam</span>
+          </div>
+
+          <div class="question-text" id="quiz-question-text">Loading question prompt...</div>
+
+          <div class="quiz-options" id="quiz-options-container">
+            <!-- Rendered dynamically -->
+          </div>
+
+          <div class="explanation-box" id="quiz-explanation">
+            <strong><i class="fa-solid fa-lightbulb"></i> <span data-i18n="explanationTitle">Academic Explanation & Notes</span>:</strong>
+            <div id="quiz-explanation-text" style="margin-top: 0.4rem;"></div>
+          </div>
+        </div>
+
+        <!-- Navigation Buttons -->
+        <div class="quiz-nav-actions">
+          <button class="btn-secondary" id="btn-prev-question" disabled>
+            <i class="fa-solid fa-arrow-left"></i> <span data-i18n="btnPrevious">Previous</span>
+          </button>
+          <button class="btn-primary" id="btn-next-question">
+            <span data-i18n="btnNext">Next Question</span> <i class="fa-solid fa-arrow-right"></i>
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- QUIZ RESULTS SCREEN -->
+    <section id="results-tab" class="tab-content">
+      <div class="results-card">
+        <div class="score-badge">
+          <div class="score-percent" id="res-percent">85%</div>
+          <div class="score-fraction" id="res-fraction">17/20 Correct</div>
+        </div>
+        <h2 id="res-title" style="font-family: var(--font-serif); font-size: 2rem;">Quiz Performance Summary</h2>
+        <p id="res-message" style="color: var(--text-muted); margin-bottom: 2rem;"></p>
+
+        <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
+          <button class="btn-secondary" id="btn-retry-quiz">
+            <i class="fa-solid fa-rotate-right"></i> <span data-i18n="btnRetakeQuiz">Retake Quiz</span>
+          </button>
+          <button class="btn-primary" id="btn-back-dashboard">
+            <i class="fa-solid fa-house"></i> <span data-i18n="btnBackHome">Return to Dashboard</span>
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- SAVED QUESTIONS & WEAK TOPICS HUB -->
+    <section id="saved-tab" class="tab-content">
+      <div class="section-header">
+        <div>
+          <h2 class="section-title"><i class="fa-solid fa-star" style="color: var(--warning-color);"></i> Revision Bank & Saved Items</h2>
+          <p style="font-size: 0.9rem; color: var(--text-muted);">Review questions you've saved during tests or practice your weak topics.</p>
+        </div>
+        <button class="btn-primary" id="btn-start-saved-quiz">
+          <i class="fa-solid fa-bolt"></i> Practice Saved Items Only
+        </button>
+      </div>
+
+      <div id="saved-questions-list" style="display: flex; flex-direction: column; gap: 1rem; margin-top: 1.5rem;">
+        <!-- Rendered dynamically by app.js -->
+      </div>
+    </section>
+
+    <!-- HISTORY LOG VIEW -->
+    <section id="history-tab" class="tab-content">
+      <div class="form-container" style="max-width: 1000px;">
+        <h2 class="section-title" style="margin-bottom: 1.5rem;"><i class="fa-solid fa-clock-rotate-left" style="color: var(--accent-primary);"></i> <span data-i18n="historyTitle">Completed Quiz History Log</span></h2>
+        <div id="history-attempts-container" style="display: flex; flex-direction: column; gap: 1rem;">
+          <!-- Rendered dynamically -->
+        </div>
+      </div>
+    </section>
+
+    <!-- ANALYTICS VIEW -->
+    <section id="analytics-tab" class="tab-content">
+      <div class="form-container" style="max-width: 1000px;">
+        <h2 class="section-title" style="margin-bottom: 1.5rem;"><i class="fa-solid fa-chart-pie" style="color: var(--accent-primary);"></i> Performance Analytics</h2>
+
+        <div class="stats-grid" style="margin-bottom: 2rem;">
+          <div class="stat-card">
+            <div class="stat-value" id="analytic-accuracy">0%</div>
+            <div class="stat-label">Accuracy Rate</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-value" id="analytic-quizzes-completed">0</div>
+            <div class="stat-label">Quizzes Finished</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-value" id="analytic-saved-items">0</div>
+            <div class="stat-label">Saved Questions</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-value" id="analytic-weak-topics-count">Unknown</div>
+            <div class="stat-label">Weak Topics</div>
+          </div>
+        </div>
+
+        <div class="section-header">
+          <h3><i class="fa-solid fa-triangle-exclamation" style="color: var(--warning-color);"></i> Identified Weak Topics</h3>
+        </div>
+        <div id="weak-topics-container" style="display: flex; flex-direction: column; gap: 0.75rem; margin-top: 1rem;">
+          <!-- Rendered dynamically -->
+        </div>
+      </div>
+    </section>
+
+    <!-- ADMIN DASHBOARD -->
+    <section id="admin-tab" class="tab-content">
+      <div class="form-container" style="max-width: 1000px;">
+        <h2 class="section-title" style="margin-bottom: 0.5rem;"><i class="fa-solid fa-user-shield" style="color: var(--accent-primary);"></i> Admin Dashboard</h2>
+        <p style="color: var(--text-muted); margin-bottom: 1.5rem;">Manage all 7 dental subjects, sheets, topics, and questions without code.</p>
+
+        <div class="nav-tabs" style="margin-bottom: 1.5rem;">
+          <button class="tab-btn active" id="admin-subtab-questions">Manage Questions</button>
+          <button class="tab-btn" id="admin-subtab-add">Add Question</button>
+          <button class="tab-btn" id="admin-subtab-import">Bulk Import / Export</button>
+        </div>
+
+        <div id="admin-view-questions">
+          <div style="display: flex; gap: 1rem; margin-bottom: 1rem;">
+            <select id="admin-subject-filter" class="form-control" style="flex: 1;">
+              <option value="ALL">All Subjects</option>
+            </select>
+          </div>
+          <div style="overflow-x: auto;">
+            <table class="admin-table">
+              <thead>
+                <tr>
+                  <th>Subject</th>
+                  <th>Topic</th>
+                  <th>Question Prompt</th>
+                  <th>Difficulty</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="admin-questions-tbody">
+                <!-- Rendered dynamically -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div id="admin-view-add" style="display: none;">
+          <form id="admin-question-form">
+            <input type="hidden" id="admin-edit-q-id" value="">
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+              <div class="form-group">
+                <label>Subject</label>
+                <select id="admin-form-subject" class="form-control" required></select>
+              </div>
+              <div class="form-group">
+                <label>Topic / Sheet Name</label>
+                <input type="text" id="admin-form-topic" class="form-control" placeholder="e.g. Enamel, Autonomic nervous system..." required>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label>Question Text (English)</label>
+              <textarea id="admin-form-qtext-en" class="form-control" placeholder="Type question in English..." required></textarea>
+            </div>
+
+            <div class="form-group">
+              <label>Question Text (Arabic)</label>
+              <textarea id="admin-form-qtext-ar" class="form-control" placeholder="اكتب السؤال باللغة العربية..."></textarea>
+            </div>
+
+            <div class="form-group">
+              <label>Answer Choices (Select radio button for correct answer)</label>
+              <div style="display: flex; flex-direction: column; gap: 0.5rem;">
+                <div class="option-row">
+                  <input type="radio" name="admin-correct-opt" value="0" class="option-radio" checked>
+                  <input type="text" id="admin-opt-0-en" class="form-control" placeholder="Option A (English)" required>
+                  <input type="text" id="admin-opt-0-ar" class="form-control" placeholder="الخيار أ (عربي)">
+                </div>
+                <div class="option-row">
+                  <input type="radio" name="admin-correct-opt" value="1" class="option-radio">
+                  <input type="text" id="admin-opt-1-en" class="form-control" placeholder="Option B (English)" required>
+                  <input type="text" id="admin-opt-1-ar" class="form-control" placeholder="الخيار ب (عربي)">
+                </div>
+                <div class="option-row">
+                  <input type="radio" name="admin-correct-opt" value="2" class="option-radio">
+                  <input type="text" id="admin-opt-2-en" class="form-control" placeholder="Option C (English)">
+                  <input type="text" id="admin-opt-2-ar" class="form-control" placeholder="الخيار ج (عربي)">
+                </div>
+                <div class="option-row">
+                  <input type="radio" name="admin-correct-opt" value="3" class="option-radio">
+                  <input type="text" id="admin-opt-3-en" class="form-control" placeholder="Option D (English)">
+                  <input type="text" id="admin-opt-3-ar" class="form-control" placeholder="الخيار د (عربي)">
+                </div>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label>Academic Explanation & Notes</label>
+              <textarea id="admin-form-explanation" class="form-control" placeholder="Detailed explanation..."></textarea>
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+              <div class="form-group">
+                <label>Difficulty</label>
+                <select id="admin-form-difficulty" class="form-control">
+                  <option value="Easy">Easy</option>
+                  <option value="Medium" selected>Medium</option>
+                  <option value="Hard">Hard</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label>Exam / Year Tag (Optional)</label>
+                <input type="text" id="admin-form-year" class="form-control" placeholder="e.g. 2024 Final">
+              </div>
+            </div>
+
+            <div style="display: flex; gap: 1rem; justify-content: flex-end;">
+              <button type="button" class="btn-secondary" id="admin-btn-cancel-edit" style="display: none;">Cancel</button>
+              <button type="submit" class="btn-primary">Save Question</button>
+            </div>
+          </form>
+        </div>
+
+        <div id="admin-view-import" style="display: none;">
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;">
+            <div class="stat-card" style="padding: 1.5rem; text-align: left;">
+              <h3><i class="fa-solid fa-download"></i> Export JSON Database</h3>
+              <p style="font-size: 0.85rem; color: var(--text-muted); margin: 0.8rem 0 1.2rem;">Download the full database of questions and taxonomy for backup.</p>
+              <button class="btn-primary" id="btn-export-database">Download JSON Backup</button>
+            </div>
+
+            <div class="stat-card" style="padding: 1.5rem; text-align: left;">
+              <h3><i class="fa-solid fa-upload"></i> Bulk Import JSON</h3>
+              <p style="font-size: 0.85rem; color: var(--text-muted); margin: 0.8rem 0 1.2rem;">Import new questions or sheets from a JSON file.</p>
+              <input type="file" id="import-json-file" accept=".json" style="display: none;">
+              <button class="btn-secondary" id="btn-trigger-import">Select JSON File</button>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+  </main>
+
+  <!-- QUESTION PALETTE OVERLAY DRAWER -->
+  <div class="palette-modal-overlay" id="palette-modal-overlay">
+    <div class="palette-drawer">
+      <div style="display: flex; justify-content: space-between; align-items: center;">
+        <h3 style="font-size: 1.2rem;" data-i18n="paletteTitle">Question Navigator</h3>
+        <button class="icon-btn" id="btn-close-palette"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+
+      <div style="display: flex; gap: 1rem; font-size: 0.8rem; color: var(--text-muted);">
+        <span style="display: flex; align-items: center; gap: 0.3rem;"><span style="width: 12px; height: 12px; border-radius: 50%; background: var(--accent-primary);"></span> <span data-i18n="paletteAnswered">Answered</span></span>
+        <span style="display: flex; align-items: center; gap: 0.3rem;"><span style="width: 12px; height: 12px; border-radius: 50%; background: var(--bg-primary); border: 1px solid var(--border-color);"></span> <span data-i18n="paletteUnanswered">Unanswered</span></span>
+      </div>
+
+      <div class="palette-grid" id="palette-grid-container">
+        <!-- Rendered dynamically -->
+      </div>
+    </div>
+  </div>
+
+  <!-- STUDENT AUTH MODAL (LOGIN / SIGN UP) -->
+  <div class="modal-overlay" id="auth-modal-overlay">
+    <div class="modal-card" style="max-width: 480px;">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+        <h3 class="section-title" id="auth-modal-title"><i class="fa-solid fa-user-graduate" style="color: var(--accent-primary);"></i> Student Account</h3>
+        <button class="icon-btn" id="btn-close-auth"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+
+      <!-- Auth Sub-tabs -->
+      <div class="nav-tabs" style="margin-bottom: 1.5rem; justify-content: center; gap: 1rem;">
+        <button class="tab-btn active" id="auth-subtab-login">Login</button>
+        <button class="tab-btn" id="auth-subtab-signup">Sign Up</button>
+      </div>
+
+      <!-- LOGIN FORM -->
+      <form id="form-student-login">
+        <div class="form-group">
+          <label>Email Address</label>
+          <input type="email" id="login-email" class="form-control" placeholder="student@dental.edu" required>
+        </div>
+        <div class="form-group">
+          <label>Password</label>
+          <input type="password" id="login-password" class="form-control" placeholder="••••••••" required>
+        </div>
+        <button type="submit" class="btn-primary" style="width: 100%; justify-content: center; margin-top: 1rem;">
+          <i class="fa-solid fa-right-to-bracket"></i> Login to DENTISTOIRE
+        </button>
+      </form>
+
+      <!-- SIGN UP FORM -->
+      <form id="form-student-signup" style="display: none;">
+        <div class="form-group">
+          <label>Full Student Name</label>
+          <input type="text" id="signup-name" class="form-control" placeholder="e.g. Hadeel Zadin" required>
+        </div>
+        <div class="form-group">
+          <label>Email Address</label>
+          <input type="email" id="signup-email" class="form-control" placeholder="student@dental.edu" required>
+        </div>
+        <div class="form-group">
+          <label>Password</label>
+          <input type="password" id="signup-password" class="form-control" placeholder="••••••••" required>
+        </div>
+        <div class="form-group">
+          <label>Academic Year</label>
+          <select id="signup-year" class="form-control">
+            <option value="2nd Year Dental" selected>2nd Year Dental Student</option>
+            <option value="3rd Year Dental">3rd Year Dental Student</option>
+            <option value="4th Year Dental">4th Year Dental Student</option>
+          </select>
+        </div>
+        <button type="submit" class="btn-primary" style="width: 100%; justify-content: center; margin-top: 1rem;">
+          <i class="fa-solid fa-user-plus"></i> Create Student Account
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- TOAST CONTAINER -->
+  <div id="toast-container" class="toast-container"></div>
+
+  <!-- SCRIPTS -->
+  <script src="i18n.js"></script>
+  <script src="data.js"></script>
+  <script src="app.js"></script>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const btnDiscover = document.getElementById('btn-discover-services');
+      if (btnDiscover) {
+        btnDiscover.addEventListener('click', () => {
+          const anchor = document.getElementById('subjects-anchor');
+          if (anchor) anchor.scrollIntoView({ behavior: 'smooth' });
+        });
+      }
+    });
+  </script>
+</body>
+</html>
