@@ -50,22 +50,46 @@ class ApplicationController {
   }
 
   setupEventListeners() {
-    const btnToggleMain = document.getElementById("btn-theme-switcher");
-    if (btnToggleMain) {
-      btnToggleMain.addEventListener("click", () => this.toggleTheme());
-    }
+    // Global Event Delegation for Nav Tabs and Buttons
+    document.addEventListener("click", (e) => {
+      // Theme Switcher Button
+      const themeBtn = e.target.closest("#btn-theme-switcher");
+      if (themeBtn) {
+        this.toggleTheme();
+        return;
+      }
 
-    document.querySelectorAll(".tab-btn").forEach(btn => {
-      btn.addEventListener("click", () => {
-        const targetTab = btn.getAttribute("data-tab");
-        if (targetTab) this.switchTab(targetTab, btn);
-      });
+      // Nav Tab Buttons
+      const tabBtn = e.target.closest(".tab-btn");
+      if (tabBtn) {
+        const targetTab = tabBtn.getAttribute("data-tab");
+        if (targetTab) this.switchTab(targetTab, tabBtn);
+        return;
+      }
+
+      // Brand Logo Home Click
+      const brandHome = e.target.closest("#brand-home-click");
+      if (brandHome) {
+        this.switchTab("home-tab", document.getElementById("nav-home"));
+        return;
+      }
+
+      // Subject Card - Open Sheets
+      const openSheetsBtn = e.target.closest(".btn-open-sheets");
+      if (openSheetsBtn) {
+        const subId = openSheetsBtn.getAttribute("data-subject-id");
+        if (subId) this.openSubjectExplorer(subId);
+        return;
+      }
+
+      // Subject Card - Start Lab Quiz
+      const startLabBtn = e.target.closest(".btn-start-lab-quiz");
+      if (startLabBtn) {
+        const subId = startLabBtn.getAttribute("data-subject-id");
+        if (subId) this.startSubjectLabQuiz(subId);
+        return;
+      }
     });
-
-    const brandHome = document.getElementById("brand-home-click");
-    if (brandHome) {
-      brandHome.addEventListener("click", () => this.switchTab("home-tab", document.getElementById("nav-home")));
-    }
 
     const searchInput = document.getElementById("global-search-input");
     if (searchInput) {
@@ -175,7 +199,13 @@ class ApplicationController {
 
     const targetEl = document.getElementById(tabId);
     if (targetEl) targetEl.classList.add("active");
-    if (btnElement) btnElement.classList.add("active");
+    
+    if (btnElement) {
+      btnElement.classList.add("active");
+    } else {
+      const matchBtn = document.querySelector(`.nav-tabs .tab-btn[data-tab="${tabId}"]`);
+      if (matchBtn) matchBtn.classList.add("active");
+    }
 
     if (tabId === "admin-tab") this.renderAdminUsersTable();
     if (tabId === "saved-tab") this.renderSavedList();
@@ -215,6 +245,7 @@ class ApplicationController {
     subjects.forEach(subj => {
       const card = document.createElement("div");
       card.className = "subject-card";
+      card.setAttribute("data-subject-id", subj.id);
       card.style.borderTop = `4px solid ${subj.color || '#c67a32'}`;
 
       card.innerHTML = `
@@ -230,23 +261,15 @@ class ApplicationController {
         </div>
 
         <div style="display: flex; flex-direction: column; gap: 0.6rem; margin-top: 1rem;">
-          <button class="btn-primary btn-open-sheets" style="width: 100%; font-size: 0.88rem;">
+          <button class="btn-primary btn-open-sheets" data-subject-id="${subj.id}" style="width: 100%; font-size: 0.88rem;">
             <i class="fa-solid fa-book"></i> View Course Sheets
           </button>
           
-          <button class="btn-secondary btn-start-lab-quiz" style="width: 100%; font-size: 0.88rem; background: var(--bg-primary); border: 1px solid var(--accent-primary); color: var(--text-main); font-weight: 700;">
+          <button class="btn-secondary btn-start-lab-quiz" data-subject-id="${subj.id}" style="width: 100%; font-size: 0.88rem; background: var(--bg-primary); border: 1px solid var(--accent-primary); color: var(--text-main); font-weight: 700;">
             <i class="fa-solid fa-flask"></i> ${subj.title} Lab
           </button>
         </div>
       `;
-
-      card.querySelector(".btn-open-sheets").addEventListener("click", () => {
-        this.openSubjectExplorer(subj.id);
-      });
-
-      card.querySelector(".btn-start-lab-quiz").addEventListener("click", () => {
-        this.startSubjectLabQuiz(subj.id);
-      });
 
       grid.appendChild(card);
     });
@@ -264,18 +287,18 @@ class ApplicationController {
 
     container.innerHTML = `
       <div style="margin-bottom: 2rem;">
-        <p style="color: var(--text-muted); margin-bottom: 1.5rem;">${sub.description}</p>
+        <p style="color: var(--text-muted); margin-bottom: 1.5rem; font-size: 1rem; line-height: 1.6;">${sub.description}</p>
         <div style="display: flex; flex-direction: column; gap: 1.2rem;">
           ${sub.sheets.map(sheet => `
             <div style="background: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: 16px; padding: 1.5rem;">
               <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
-                <h4 style="font-size: 1.1rem; color: var(--text-main); font-weight: 700;">${sheet.title}</h4>
+                <h4 style="font-size: 1.15rem; color: var(--text-main); font-weight: 700;">${sheet.title}</h4>
                 <span style="font-size: 0.8rem; background: var(--bg-primary); padding: 0.3rem 0.8rem; border-radius: 20px; color: var(--accent-primary); border: 1px solid var(--border-color); font-weight: 700;">
                   Lecture Sheet
                 </span>
               </div>
-              <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 1rem;">${sheet.summary}</p>
-              <button class="btn-primary" onclick="app.startSingleSheetQuiz('${sub.id}', '${sheet.id}')" style="padding: 0.5rem 1.2rem; font-size: 0.85rem;">
+              <p style="font-size: 0.88rem; color: var(--text-muted); margin-bottom: 1.2rem; line-height: 1.5;">${sheet.summary}</p>
+              <button class="btn-primary" onclick="window.app.startSingleSheetQuiz('${sub.id}', '${sheet.id}')" style="padding: 0.6rem 1.4rem; font-size: 0.88rem; cursor: pointer;">
                 <i class="fa-solid fa-play"></i> Start ${sheet.title} Lab Quiz
               </button>
             </div>
@@ -637,9 +660,10 @@ class ApplicationController {
   }
 }
 
+// Global initialization
 document.addEventListener("DOMContentLoaded", () => {
   window.app = new ApplicationController();
 });
 "@
 
-[System.IO.File]::WriteAllText('C:\Users\us\.gemini\antigravity\scratch\lecture_quiz_app\app.js', $appJsClean, [System.Text.Encoding]::UTF8)
+[System.IO.File]::WriteAllText('C:\Users\us\.gemini\antigravity\scratch\lecture_quiz_app\app.js', $appJsDelegation, [System.Text.Encoding]::UTF8)
