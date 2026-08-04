@@ -1,8 +1,8 @@
 ﻿/* ==========================================================================
-   DENTISTOIRE - PRODUCTION MULTI-THEME ENGINE (v639214656910058600)
+   DENTISTOIRE - PRODUCTION MULTI-THEME ENGINE (v639214660402863207)
    ========================================================================== */
 
-/* THEME 1 (PHOTO 1 COZY CREAM & SEAMLESS BUNNY) */
+/* THEME 1 (PHOTO 1 COZY CREAM & SEAMLESS TRANSPARENT BUNNY) */
 body, body.theme-1 {
   background-color: #f9f0ea !important;
   color: #3d2626 !important;
@@ -276,20 +276,17 @@ main {
   align-items: center;
 }
 
-/* 100% SEAMLESS BUNNY ARTWORK BLEND WITH SOFT RADIAL MASK */
+/* 100% SEAMLESS TRANSPARENT PNG BUNNY ILLUSTRATION (ZERO BOX, ZERO TINT, ZERO LETTERS) */
 .hero-bunny-illustration {
   width: 100%;
   max-width: 520px;
   height: auto;
   display: block;
-  mix-blend-mode: multiply;
-  filter: contrast(102%) brightness(99%);
-  -webkit-mask-image: radial-gradient(circle at center, black 70%, transparent 98%);
-  mask-image: radial-gradient(circle at center, black 70%, transparent 98%);
   background: transparent;
   border: none;
   box-shadow: none;
   outline: none;
+  filter: drop-shadow(0 14px 28px rgba(180, 120, 110, 0.18));
 }
 
 .dentistoire-banner-card {
