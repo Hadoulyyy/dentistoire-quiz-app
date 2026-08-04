@@ -15,17 +15,21 @@ class ApplicationController {
     this.quizHistory = JSON.parse(localStorage.getItem("dq_history_v1")) || [];
     
     this.currentUser = JSON.parse(localStorage.getItem("dq_user_session_v1")) || null;
-    this.usersDatabase = JSON.parse(localStorage.getItem("dq_users_db_v1")) || (window.INITIAL_USERS_DATABASE || []);
+    this.usersDatabase = JSON.parse(localStorage.getItem("dq_users_db_v1")) || [
+      { id: "usr_101", fullName: "Sarah Mahmoud", email: "sarah.m@dentistry.edu", universityId: "DEN-2024-101", regDate: "2026-08-01", status: "Active", role: "Student" },
+      { id: "usr_102", fullName: "Ahmed Hassan", email: "ahmed.h@dentistry.edu", universityId: "DEN-2024-102", regDate: "2026-08-02", status: "Active", role: "Student" },
+      { id: "usr_103", fullName: "Nour El-Din", email: "nour.e@dentistry.edu", universityId: "DEN-2024-103", regDate: "2026-08-03", status: "Active", role: "Student" }
+    ];
 
     this.init();
   }
 
   init() {
     this.applyTheme(this.currentTheme);
-    this.setupEventListeners();
     this.setupAuthListeners();
     this.renderHeaderProfile();
     this.renderSubjectCards();
+    this.renderAllSubjectsInLibrary();
     this.updateSavedBadge();
   }
 
@@ -47,63 +51,6 @@ class ApplicationController {
     const nextTheme = this.currentTheme === "theme-1" ? "theme-2" : "theme-1";
     this.applyTheme(nextTheme);
     this.showToast(`Switched to ${nextTheme === 'theme-2' ? 'Theme 2 (Terracotta Amber)' : 'Theme 1 (Cozy Cream)'}`);
-  }
-
-  setupEventListeners() {
-    // Global Event Delegation for Nav Tabs and Buttons
-    document.addEventListener("click", (e) => {
-      // Theme Switcher Button
-      const themeBtn = e.target.closest("#btn-theme-switcher");
-      if (themeBtn) {
-        this.toggleTheme();
-        return;
-      }
-
-      // Nav Tab Buttons
-      const tabBtn = e.target.closest(".tab-btn");
-      if (tabBtn) {
-        const targetTab = tabBtn.getAttribute("data-tab");
-        if (targetTab) this.switchTab(targetTab, tabBtn);
-        return;
-      }
-
-      // Brand Logo Home Click
-      const brandHome = e.target.closest("#brand-home-click");
-      if (brandHome) {
-        this.switchTab("home-tab", document.getElementById("nav-home"));
-        return;
-      }
-
-      // Subject Card - Open Sheets
-      const openSheetsBtn = e.target.closest(".btn-open-sheets");
-      if (openSheetsBtn) {
-        const subId = openSheetsBtn.getAttribute("data-subject-id");
-        if (subId) this.openSubjectExplorer(subId);
-        return;
-      }
-
-      // Subject Card - Start Lab Quiz
-      const startLabBtn = e.target.closest(".btn-start-lab-quiz");
-      if (startLabBtn) {
-        const subId = startLabBtn.getAttribute("data-subject-id");
-        if (subId) this.startSubjectLabQuiz(subId);
-        return;
-      }
-    });
-
-    const searchInput = document.getElementById("global-search-input");
-    if (searchInput) {
-      searchInput.addEventListener("input", (e) => this.handleSmartSearch(e.target.value));
-    }
-
-    document.getElementById("btn-prev-question")?.addEventListener("click", () => this.navigateQuestion(-1));
-    document.getElementById("btn-next-question")?.addEventListener("click", () => this.navigateQuestion(1));
-    document.getElementById("btn-exit-quiz")?.addEventListener("click", () => this.exitQuiz());
-    document.getElementById("btn-retry-quiz")?.addEventListener("click", () => this.startQuiz(this.activeQuizQuestions, "Retake Laboratory Quiz"));
-    document.getElementById("btn-back-dashboard")?.addEventListener("click", () => this.switchTab("home-tab", document.getElementById("nav-home")));
-    document.getElementById("btn-bookmark-current")?.addEventListener("click", () => this.toggleBookmarkCurrent());
-
-    this.setupAdminDatabaseEvents();
   }
 
   setupAuthListeners() {
@@ -262,11 +209,11 @@ class ApplicationController {
         </div>
 
         <div style="display: flex; flex-direction: column; gap: 0.6rem; margin-top: 1rem;">
-          <button class="btn-primary btn-open-sheets" data-subject-id="${subj.id}" style="width: 100%; font-size: 0.88rem;">
+          <button class="btn-primary btn-open-sheets" onclick="window.app.openSubjectExplorer('${subj.id}')" style="width: 100%; font-size: 0.88rem; cursor: pointer;">
             <i class="fa-solid fa-book"></i> View Course Sheets
           </button>
           
-          <button class="btn-secondary btn-start-lab-quiz" data-subject-id="${subj.id}" style="width: 100%; font-size: 0.88rem; background: var(--bg-primary); border: 1px solid var(--accent-primary); color: var(--text-main); font-weight: 700;">
+          <button class="btn-secondary btn-start-lab-quiz" onclick="window.app.startSubjectLabQuiz('${subj.id}')" style="width: 100%; font-size: 0.88rem; background: var(--bg-primary); border: 1px solid var(--accent-primary); color: var(--text-main); font-weight: 700; cursor: pointer;">
             <i class="fa-solid fa-flask"></i> ${subj.title} Lab
           </button>
         </div>
@@ -274,6 +221,90 @@ class ApplicationController {
 
       grid.appendChild(card);
     });
+  }
+
+  // MULTI-FILTER SEARCH ENGINE FOR SUBJECT NAME, SHEET NAME, AND KEYWORDS
+  applyMultiFilters() {
+    const selectedSubjId = document.getElementById("filter-subject-select")?.value || "ALL";
+    const sheetQuery = (document.getElementById("filter-sheet-input")?.value || "").trim().toLowerCase();
+    const keywordQuery = (document.getElementById("filter-keyword-input")?.value || "").trim().toLowerCase();
+
+    const section = document.getElementById("search-results-section");
+    const list = document.getElementById("search-results-list");
+    const countEl = document.getElementById("search-count");
+
+    if (selectedSubjId === "ALL" && !sheetQuery && !keywordQuery) {
+      if (section) section.style.display = "none";
+      return;
+    }
+
+    const matches = [];
+    const subjects = this.getSubjects();
+
+    subjects.forEach(subj => {
+      // 1. Subject Name Filter
+      if (selectedSubjId !== "ALL" && subj.id !== selectedSubjId) return;
+
+      subj.sheets.forEach(sheet => {
+        const sTitle = sheet.title.toLowerCase();
+        const sSummary = sheet.summary.toLowerCase();
+
+        // 2. Sheet Name Filter
+        if (sheetQuery && !sTitle.includes(sheetQuery)) return;
+
+        // 3. Keyword / Question Filter
+        if (keywordQuery && !sTitle.includes(keywordQuery) && !sSummary.includes(keywordQuery)) return;
+
+        matches.push({
+          type: "Lecture Sheet",
+          subjTitle: subj.title,
+          subjId: subj.id,
+          sheetTitle: sheet.title,
+          sheetId: sheet.id,
+          summary: sheet.summary
+        });
+      });
+    });
+
+    if (countEl) countEl.textContent = matches.length;
+    if (list) list.innerHTML = "";
+
+    if (matches.length === 0) {
+      list.innerHTML = `<div style="color: var(--text-muted); font-size: 0.9rem;">No matching lecture sheets or subjects found. Try adjusting your search filters.</div>`;
+    } else {
+      matches.forEach(m => {
+        const card = document.createElement("div");
+        card.className = "subject-card";
+        card.style.padding = "1.2rem 1.6rem";
+        card.innerHTML = `
+          <div style="display: flex; justify-content: space-between; align-items: center;">
+            <div>
+              <span style="background: rgba(197,133,133,0.15); color: var(--accent-primary); padding: 0.2rem 0.6rem; border-radius: 50px; font-size: 0.75rem; font-weight: 700;">${m.subjTitle}</span>
+              <div style="font-weight: 700; font-size: 1.1rem; margin-top: 0.4rem; color: var(--text-main);">${m.sheetTitle}</div>
+              <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 0.2rem;">${m.summary}</p>
+            </div>
+            <button class="btn-primary" onclick="window.app.startSingleSheetQuiz('${m.subjId}', '${m.sheetId}')" style="padding: 0.5rem 1.2rem; font-size: 0.85rem; cursor: pointer; white-space: nowrap;">
+              <i class="fa-solid fa-play"></i> Start Sheet Quiz
+            </button>
+          </div>
+        `;
+        list.appendChild(card);
+      });
+    }
+
+    if (section) section.style.display = "block";
+  }
+
+  clearFilters() {
+    const sSelect = document.getElementById("filter-subject-select");
+    const sInput = document.getElementById("filter-sheet-input");
+    const kInput = document.getElementById("filter-keyword-input");
+    const section = document.getElementById("search-results-section");
+
+    if (sSelect) sSelect.value = "ALL";
+    if (sInput) sInput.value = "";
+    if (kInput) kInput.value = "";
+    if (section) section.style.display = "none";
   }
 
   renderAllSubjectsInLibrary() {
@@ -297,7 +328,7 @@ class ApplicationController {
                   <div style="font-size: 0.82rem; color: var(--text-muted); font-weight: 700;">${sub.sheets.length} Lecture Sheets Available</div>
                 </div>
               </div>
-              <button class="btn-primary" onclick="window.app.startSubjectLabQuiz('${sub.id}')" style="padding: 0.5rem 1.2rem; font-size: 0.85rem;">
+              <button class="btn-primary" onclick="window.app.startSubjectLabQuiz('${sub.id}')" style="padding: 0.5rem 1.2rem; font-size: 0.85rem; cursor: pointer;">
                 <i class="fa-solid fa-flask"></i> Take ${sub.title} Lab Quiz
               </button>
             </div>
@@ -335,7 +366,7 @@ class ApplicationController {
 
     container.innerHTML = `
       <div style="margin-bottom: 2rem;">
-        <button class="btn-secondary" onclick="window.app.renderAllSubjectsInLibrary()" style="margin-bottom: 1.5rem;">
+        <button class="btn-secondary" onclick="window.app.renderAllSubjectsInLibrary()" style="margin-bottom: 1.5rem; cursor: pointer;">
           <i class="fa-solid fa-arrow-left"></i> Back to All Subjects
         </button>
         <p style="color: var(--text-muted); margin-bottom: 1.5rem; font-size: 1rem; line-height: 1.6;">${sub.description}</p>
@@ -393,76 +424,12 @@ class ApplicationController {
     this.startQuiz(questions, `${sub.title} - ${sheet.title} Lab`);
   }
 
-  handleSmartSearch(query) {
-    const qTrim = query.trim().toLowerCase();
-    const section = document.getElementById("search-results-section");
-    const list = document.getElementById("search-results-list");
-    const countEl = document.getElementById("search-count");
-
-    if (!qTrim) {
-      section.style.display = "none";
-      return;
-    }
-
-    const matches = [];
-    const subjects = this.getSubjects();
-
-    subjects.forEach(subj => {
-      const name = subj.title.toLowerCase();
-      if (name.includes(qTrim)) {
-        matches.push({ type: "Subject", title: `${subj.title} Lab`, subjId: subj.id });
-      }
-      subj.sheets.forEach(sheet => {
-        const sTitle = sheet.title.toLowerCase();
-        if (sTitle.includes(qTrim)) {
-          matches.push({ type: "Lecture Sheet", title: `${subj.title} - ${sheet.title}`, subjId: subj.id, sheetId: sheet.id });
-        }
-      });
-    });
-
-    countEl.textContent = matches.length;
-    list.innerHTML = "";
-
-    if (matches.length === 0) {
-      list.innerHTML = `<div style="color: var(--text-muted); font-size: 0.9rem;">No matching items found for "${query}".</div>`;
-    } else {
-      matches.slice(0, 8).forEach(m => {
-        const card = document.createElement("div");
-        card.className = "subject-card";
-        card.style.padding = "1rem 1.4rem";
-        card.innerHTML = `
-          <div style="display: flex; justify-content: space-between; align-items: center;">
-            <div>
-              <span style="background: rgba(197,133,133,0.15); color: var(--accent-primary); padding: 0.2rem 0.6rem; border-radius: 50px; font-size: 0.75rem; font-weight: 700;">${m.type}</span>
-              <div style="font-weight: 700; font-size: 1.05rem; margin-top: 0.3rem;">${m.title}</div>
-            </div>
-            <button class="btn-primary" style="padding: 0.4rem 1rem; font-size: 0.82rem;">Start Lab</button>
-          </div>
-        `;
-        card.querySelector("button").addEventListener("click", () => {
-          this.openSubjectExplorer(m.subjId);
-        });
-        list.appendChild(card);
-      });
-    }
-
-    section.style.display = "block";
-  }
-
-  setupAdminDatabaseEvents() {
-    const btnExportCsv = document.getElementById("btn-export-users-csv");
-    if (btnExportCsv) btnExportCsv.addEventListener("click", () => this.exportUsersCSV());
-
-    const btnLogoutAdmin = document.getElementById("btn-admin-logout");
-    if (btnLogoutAdmin) {
-      btnLogoutAdmin.addEventListener("click", () => {
-        this.currentUser = null;
-        localStorage.removeItem("dq_user_session_v1");
-        this.renderHeaderProfile();
-        this.switchTab("home-tab", document.getElementById("nav-home"));
-        this.showToast("Admin logged out.");
-      });
-    }
+  logoutAdmin() {
+    this.currentUser = null;
+    localStorage.removeItem("dq_user_session_v1");
+    this.renderHeaderProfile();
+    this.switchTab("home-tab", document.getElementById("nav-home"));
+    this.showToast("Admin logged out.");
   }
 
   renderAdminUsersTable() {
@@ -470,31 +437,39 @@ class ApplicationController {
     if (!tbody) return;
     tbody.innerHTML = "";
 
-    this.usersDatabase.forEach((usr, idx) => {
+    const searchQ = (document.getElementById("admin-user-search")?.value || "").trim().toLowerCase();
+
+    const filtered = this.usersDatabase.filter(u => {
+      const name = (u.fullName || u.name || "").toLowerCase();
+      const email = (u.email || "").toLowerCase();
+      const id = (u.universityId || u.id || "").toLowerCase();
+      return !searchQ || name.includes(searchQ) || email.includes(searchQ) || id.includes(searchQ);
+    });
+
+    filtered.forEach((usr, idx) => {
       const tr = document.createElement("tr");
       tr.style.borderBottom = "1px solid var(--border-color)";
       tr.innerHTML = `
-        <td style="padding: 0.8rem; font-weight: 700;">${usr.fullName || usr.name}</td>
+        <td style="padding: 0.8rem; font-weight: 700; color: var(--text-main);">${usr.fullName || usr.name}</td>
         <td style="padding: 0.8rem; color: var(--accent-primary); font-weight: 600;">${usr.email}</td>
         <td style="padding: 0.8rem;">${usr.universityId || usr.id}</td>
         <td style="padding: 0.8rem;">${usr.regDate || usr.date || '2026-08-04'}</td>
         <td style="padding: 0.8rem;"><span style="padding: 0.2rem 0.6rem; border-radius: 50px; font-size: 0.78rem; font-weight: 700; background: var(--border-color);">${usr.status || 'Active'}</span></td>
         <td style="padding: 0.8rem;">
-          <button class="btn-secondary btn-delete-user" style="padding: 0.3rem 0.6rem; font-size: 0.78rem; color: #d46a6a;">Delete</button>
+          <button class="btn-secondary btn-delete-user" onclick="window.app.deleteUser(${idx})" style="padding: 0.3rem 0.6rem; font-size: 0.78rem; color: #d46a6a; cursor: pointer;">Delete</button>
         </td>
       `;
-
-      tr.querySelector(".btn-delete-user").addEventListener("click", () => {
-        if (confirm(`Delete user ${usr.fullName || usr.name}?`)) {
-          this.usersDatabase.splice(idx, 1);
-          localStorage.setItem("dq_users_db_v1", JSON.stringify(this.usersDatabase));
-          this.renderAdminUsersTable();
-          this.showToast("User deleted.");
-        }
-      });
-
       tbody.appendChild(tr);
     });
+  }
+
+  deleteUser(idx) {
+    if (confirm("Delete user profile from database?")) {
+      this.usersDatabase.splice(idx, 1);
+      localStorage.setItem("dq_users_db_v1", JSON.stringify(this.usersDatabase));
+      this.renderAdminUsersTable();
+      this.showToast("User deleted.");
+    }
   }
 
   exportUsersCSV() {
@@ -548,6 +523,7 @@ class ApplicationController {
       btn.style.padding = "0.9rem 1.2rem";
       btn.style.borderRadius = "14px";
       btn.style.textAlign = "left";
+      btn.style.cursor = "pointer";
 
       const keyLetter = String.fromCharCode(65 + idx);
       btn.innerHTML = `<strong style="color: var(--accent-primary); margin-right: 0.6rem;">${keyLetter}.</strong> ${optText}`;
@@ -640,7 +616,7 @@ class ApplicationController {
       div.className = "subject-card";
       div.style.padding = "1.2rem";
       div.innerHTML = `
-        <div style="font-weight: 700; margin-bottom: 0.4rem;">${q.questionTextEn || q.question}</div>
+        <div style="font-weight: 700; margin-bottom: 0.4rem; color: var(--text-main);">${q.questionTextEn || q.question}</div>
         <div style="font-size: 0.85rem; color: var(--accent-primary); font-weight: 700;">${q.topic || 'Laboratory Quiz'}</div>
       `;
       container.appendChild(div);
@@ -711,10 +687,8 @@ class ApplicationController {
   }
 }
 
-// Global initialization
-document.addEventListener("DOMContentLoaded", () => {
-  window.app = new ApplicationController();
-});
+// INSTANT GLOBAL INSTANTIATION
+window.app = new ApplicationController();
 "@
 
-[System.IO.File]::WriteAllText('C:\Users\us\.gemini\antigravity\scratch\lecture_quiz_app\app.js', $appJsFullLibrary, [System.Text.Encoding]::UTF8)
+[System.IO.File]::WriteAllText('C:\Users\us\.gemini\antigravity\scratch\lecture_quiz_app\app.js', $appJsMultiFilter, [System.Text.Encoding]::UTF8)
