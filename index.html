@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en" dir="ltr">
 <head>
   <meta charset="UTF-8">
@@ -13,39 +13,39 @@
   <!-- FontAwesome Icons -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
-  <link rel="stylesheet" href="styles.css?v=639214910950994610">
+  <link rel="stylesheet" href="styles.css?v=20260805_v5">
 </head>
 <body class="theme-1">
 
   <!-- HEADER NAVBAR -->
   <header>
     <div class="header-container">
-      <div class="brand" id="brand-home-click" style="cursor: pointer; display: flex; align-items: center; gap: 0.6rem;">
+      <div class="brand" id="brand-home-click" onclick="if(window.app) window.app.switchTab('home-tab')" style="cursor: pointer; display: flex; align-items: center; gap: 0.6rem;">
         <i class="fa-solid fa-tooth" style="font-size: 1.4rem; color: var(--accent-primary);"></i>
         <div class="brand-title">DENTISTOIRE</div>
       </div>
 
       <nav class="nav-tabs">
-        <button class="tab-btn active" data-tab="home-tab" id="nav-home">Home</button>
-        <button class="tab-btn" data-tab="subjects-tab" id="nav-subjects">Subjects</button>
-        <button class="tab-btn" data-tab="saved-tab" id="nav-saved">Saved & Weak (<span id="saved-count-badge">0</span>)</button>
-        <button class="tab-btn" data-tab="history-tab" id="nav-history">History</button>
-        <button class="tab-btn" data-tab="analytics-tab" id="nav-analytics">Analytics</button>
+        <button class="tab-btn active" data-tab="home-tab" id="nav-home" onclick="if(window.app) window.app.switchTab('home-tab', this)">Home</button>
+        <button class="tab-btn" data-tab="subjects-tab" id="nav-subjects" onclick="if(window.app) window.app.switchTab('subjects-tab', this)">Subjects</button>
+        <button class="tab-btn" data-tab="saved-tab" id="nav-saved" onclick="if(window.app) window.app.switchTab('saved-tab', this)">Saved & Weak (<span id="saved-count-badge">0</span>)</button>
+        <button class="tab-btn" data-tab="history-tab" id="nav-history" onclick="if(window.app) window.app.switchTab('history-tab', this)">History</button>
+        <button class="tab-btn" data-tab="analytics-tab" id="nav-analytics" onclick="if(window.app) window.app.switchTab('analytics-tab', this)">Analytics</button>
         
         <!-- ALWAYS VISIBLE ADMIN HUB TAB -->
-        <button class="tab-btn" data-tab="admin-tab" id="nav-admin" style="display: inline-block; color: #c67a32; font-weight: 700;">
+        <button class="tab-btn" data-tab="admin-tab" id="nav-admin" onclick="if(window.app) window.app.switchTab('admin-tab', this)" style="display: inline-block; color: #c67a32; font-weight: 700;">
           <i class="fa-solid fa-shield-halved"></i> Admin Hub
         </button>
       </nav>
 
       <div class="header-actions">
         <!-- SINGLE CLEAR THEME SWITCHER BUTTON -->
-        <button class="btn-primary" id="btn-theme-switcher" style="padding: 0.65rem 1.4rem; font-size: 0.9rem; cursor: pointer; display: inline-flex; align-items: center; gap: 0.5rem; background: #c67a32; color: #ffffff; border: none; box-shadow: 0 4px 14px rgba(0,0,0,0.15);">
+        <button class="btn-primary" id="btn-theme-switcher" onclick="if(window.app) window.app.toggleTheme()" style="padding: 0.65rem 1.4rem; font-size: 0.9rem; cursor: pointer; display: inline-flex; align-items: center; gap: 0.5rem; background: #c67a32; color: #ffffff; border: none; box-shadow: 0 4px 14px rgba(0,0,0,0.15);">
           <i class="fa-solid fa-palette"></i>
           <span id="theme-btn-label-text">Switch to Theme 2</span>
         </button>
 
-        <button class="btn-secondary" id="btn-open-auth" style="padding: 0.65rem 1.2rem; font-size: 0.85rem;">
+        <button class="btn-secondary" id="btn-open-auth" onclick="document.getElementById('auth-modal-overlay').style.display='flex'" style="padding: 0.65rem 1.2rem; font-size: 0.85rem;">
           <i class="fa-solid fa-user-graduate"></i> <span id="header-user-name">Login</span>
         </button>
       </div>
@@ -77,7 +77,7 @@
           </p>
 
           <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
-            <button class="btn-discover-services" id="btn-discover-services">
+            <button class="btn-discover-services" id="btn-discover-services" onclick="if(window.app) window.app.switchTab('subjects-tab')">
               <i class="fa-solid fa-arrow-right"></i> DISCOVER OUR SERVICES
             </button>
           </div>
@@ -127,19 +127,50 @@
       <!-- 7 DENTAL SUBJECTS & LABORATORY QUIZZES SECTION -->
       <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;" id="subjects-anchor">
         <h2 style="font-family: 'Cormorant Garamond', serif; font-size: 1.8rem;">2nd Year Dental Courses & Laboratory Quizzes</h2>
-        <button class="btn-primary" id="btn-practice-weak-top"><i class="fa-solid fa-bolt"></i> Practice Weak Topics</button>
+        <button class="btn-primary" id="btn-practice-weak-top" onclick="if(window.app) window.app.switchTab('subjects-tab')"><i class="fa-solid fa-bolt"></i> Practice Weak Topics</button>
       </div>
 
-      <!-- SMART INSTANT SEARCH BAR -->
-      <div style="position: relative;">
-        <input type="text" id="global-search-input" class="search-input" placeholder="Search by Subject (e.g. Oral Histology), Sheet Name (e.g. Histology Sheet 3), or Laboratory Quiz...">
+      <!-- MULTI-FILTER SEARCH & DISCOVERY BAR -->
+      <div style="background: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: 20px; padding: 1.5rem; margin-bottom: 2rem;">
+        <h3 style="font-family: 'Cormorant Garamond', serif; font-size: 1.3rem; margin-bottom: 1rem; color: var(--text-main);">
+          <i class="fa-solid fa-magnifying-glass" style="color: var(--accent-primary);"></i> Multi-Filter Search Engine
+        </h3>
+        
+        <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1rem;">
+          <!-- 1. SUBJECT NAME FILTER DROPDOWN -->
+          <div>
+            <label style="font-size: 0.82rem; font-weight: 700; color: var(--text-muted); display: block; margin-bottom: 0.4rem;">Filter by Subject Name</label>
+            <select id="filter-subject-select" class="search-input" style="margin-bottom: 0; padding: 0.75rem 1rem; width: 100%; border-radius: 12px; border: 1px solid var(--border-color); background: var(--bg-primary); color: var(--text-main); font-family: inherit;" onchange="if(window.app) window.app.applyMultiFilters()">
+              <option value="ALL">-- All 7 Dental Subjects --</option>
+              <option value="subj_oral_histology">Oral Histology</option>
+              <option value="subj_crown_bridge">Crown and Bridge</option>
+              <option value="subj_prosthodontics">Prosthodontics</option>
+              <option value="subj_pharmacology">Pharmacology</option>
+              <option value="subj_pathology">Pathology</option>
+              <option value="subj_microbiology">Microbiology</option>
+              <option value="subj_conservative">Operative Dentistry & Dental Materials</option>
+            </select>
+          </div>
+
+          <!-- 2. SHEET NAME SEARCH INPUT -->
+          <div>
+            <label style="font-size: 0.82rem; font-weight: 700; color: var(--text-muted); display: block; margin-bottom: 0.4rem;">Search by Sheet Name</label>
+            <input type="text" id="filter-sheet-input" class="search-input" style="margin-bottom: 0; padding: 0.75rem 1rem; width: 100%; border-radius: 12px; border: 1px solid var(--border-color); background: var(--bg-primary); color: var(--text-main);" placeholder="e.g. Enamel, Wax pattern, Mucosa..." oninput="if(window.app) window.app.applyMultiFilters()">
+          </div>
+
+          <!-- 3. KEYWORD / QUESTION SEARCH INPUT -->
+          <div>
+            <label style="font-size: 0.82rem; font-weight: 700; color: var(--text-muted); display: block; margin-bottom: 0.4rem;">Search Keyword or Question</label>
+            <input type="text" id="filter-keyword-input" class="search-input" style="margin-bottom: 0; padding: 0.75rem 1rem; width: 100%; border-radius: 12px; border: 1px solid var(--border-color); background: var(--bg-primary); color: var(--text-main);" placeholder="e.g. retention, amelogenesis..." oninput="if(window.app) window.app.applyMultiFilters()">
+          </div>
+        </div>
       </div>
 
       <!-- SEARCH RESULTS CONTAINER -->
       <div id="search-results-section" style="display: none; margin-bottom: 2.5rem;">
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
-          <h3>Search Results (<span id="search-count">0</span>)</h3>
-          <button class="btn-secondary" id="btn-clear-search">Clear Search</button>
+          <h3>Filtered Results (<span id="search-count">0</span>)</h3>
+          <button class="btn-secondary" id="btn-clear-search" onclick="if(window.app) window.app.clearFilters()">Clear Filters</button>
         </div>
         <div id="search-results-list" style="display: flex; flex-direction: column; gap: 1rem;"></div>
       </div>
@@ -152,8 +183,8 @@
     <section id="subjects-tab" class="tab-content">
       <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
         <div>
-          <button class="btn-secondary" id="btn-back-subjects-list" style="margin-bottom: 0.5rem; display: none;"><i class="fa-solid fa-arrow-left"></i> All Subjects</button>
-          <h2 class="section-title" id="subject-explorer-title" style="font-family: 'Cormorant Garamond', serif;">Subjects Library</h2>
+          <button class="btn-secondary" id="btn-back-subjects-list" onclick="if(window.app) window.app.renderAllSubjectsInLibrary()" style="margin-bottom: 0.5rem;"><i class="fa-solid fa-arrow-left"></i> All Subjects</button>
+          <h2 class="section-title" id="subject-explorer-title" style="font-family: 'Cormorant Garamond', serif;">Subjects Library & All 88 Lecture Sheets</h2>
         </div>
       </div>
       <div id="subject-explorer-content"></div>
@@ -167,7 +198,7 @@
             <h3 id="quiz-title-display" style="font-family: 'Cormorant Garamond', serif; font-size: 1.6rem;">Laboratory Quiz</h3>
             <div style="font-size: 0.85rem; color: var(--text-muted);" id="quiz-progress-text">Question 1 of 10</div>
           </div>
-          <button class="btn-secondary" id="btn-exit-quiz"><i class="fa-solid fa-xmark"></i> Exit Quiz</button>
+          <button class="btn-secondary" id="btn-exit-quiz" onclick="if(window.app) window.app.exitQuiz()"><i class="fa-solid fa-xmark"></i> Exit Quiz</button>
         </div>
 
         <div style="height: 6px; background: var(--border-color); border-radius: 10px; margin-bottom: 1.5rem; overflow: hidden;">
@@ -175,7 +206,7 @@
         </div>
 
         <div style="position: relative; margin-bottom: 1.5rem;">
-          <button id="btn-bookmark-current" style="position: absolute; top: 0; right: 0; background: transparent; border: none; font-size: 1.3rem; color: var(--accent-primary); cursor: pointer;"><i class="fa-regular fa-star"></i></button>
+          <button id="btn-bookmark-current" onclick="if(window.app) window.app.toggleBookmarkCurrent()" style="position: absolute; top: 0; right: 0; background: transparent; border: none; font-size: 1.3rem; color: var(--accent-primary); cursor: pointer;"><i class="fa-regular fa-star"></i></button>
           <div id="quiz-question-text" style="font-size: 1.2rem; font-weight: 700; margin-bottom: 1.5rem; color: var(--text-main);">Loading question...</div>
           <div id="quiz-options-container" style="display: flex; flex-direction: column; gap: 0.8rem;"></div>
           <div id="quiz-explanation" style="display: none; margin-top: 1.5rem; padding: 1.2rem; background: var(--bg-primary); border-radius: 12px; border: 1px solid var(--border-color);">
@@ -185,8 +216,8 @@
         </div>
 
         <div style="display: flex; justify-content: space-between;">
-          <button class="btn-secondary" id="btn-prev-question" disabled><i class="fa-solid fa-arrow-left"></i> Previous</button>
-          <button class="btn-primary" id="btn-next-question">Next Question <i class="fa-solid fa-arrow-right"></i></button>
+          <button class="btn-secondary" id="btn-prev-question" onclick="if(window.app) window.app.navigateQuestion(-1)" disabled><i class="fa-solid fa-arrow-left"></i> Previous</button>
+          <button class="btn-primary" id="btn-next-question" onclick="if(window.app) window.app.navigateQuestion(1)">Next Question <i class="fa-solid fa-arrow-right"></i></button>
         </div>
       </div>
     </section>
@@ -199,8 +230,8 @@
         <h2 id="res-title" style="font-family: 'Cormorant Garamond', serif; font-size: 2rem; margin-bottom: 0.5rem;">Laboratory Quiz Performance</h2>
         <p id="res-message" style="color: var(--text-muted); margin-bottom: 2rem;"></p>
         <div style="display: flex; gap: 1rem; justify-content: center;">
-          <button class="btn-secondary" id="btn-retry-quiz"><i class="fa-solid fa-rotate-right"></i> Retake Quiz</button>
-          <button class="btn-primary" id="btn-back-dashboard"><i class="fa-solid fa-house"></i> Return to Dashboard</button>
+          <button class="btn-secondary" id="btn-retry-quiz" onclick="if(window.app) window.app.startQuiz(window.app.activeQuizQuestions, 'Retake Laboratory Quiz')"><i class="fa-solid fa-rotate-right"></i> Retake Quiz</button>
+          <button class="btn-primary" id="btn-back-dashboard" onclick="if(window.app) window.app.switchTab('home-tab', document.getElementById('nav-home'))"><i class="fa-solid fa-house"></i> Return to Dashboard</button>
         </div>
       </div>
     </section>
@@ -209,7 +240,7 @@
     <section id="saved-tab" class="tab-content">
       <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
         <h2>Saved Revision Bank</h2>
-        <button class="btn-primary" id="btn-start-saved-quiz"><i class="fa-solid fa-bolt"></i> Practice Saved Items Only</button>
+        <button class="btn-primary" id="btn-start-saved-quiz" onclick="if(window.app) window.app.switchTab('subjects-tab')"><i class="fa-solid fa-bolt"></i> Practice Saved Items Only</button>
       </div>
       <div id="saved-questions-list" style="display: flex; flex-direction: column; gap: 1rem;"></div>
     </section>
@@ -248,12 +279,12 @@
       <div style="background: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: 24px; padding: 2rem;">
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
           <h2>Secure Admin Hub</h2>
-          <button class="btn-secondary" id="btn-admin-logout">Logout Admin</button>
+          <button class="btn-secondary" id="btn-admin-logout" onclick="if(window.app) window.app.logoutAdmin()">Logout Admin</button>
         </div>
 
         <div style="display: flex; justify-content: space-between; gap: 1rem; margin-bottom: 1.2rem;">
-          <input type="text" id="admin-user-search" class="search-input" style="max-width: 380px; margin-bottom: 0;" placeholder="Search user by name, email, or ID...">
-          <button class="btn-primary" id="btn-export-users-csv"><i class="fa-solid fa-file-csv"></i> Export Users CSV</button>
+          <input type="text" id="admin-user-search" class="search-input" style="max-width: 380px; margin-bottom: 0;" placeholder="Search user by name, email, or ID..." oninput="if(window.app) window.app.renderAdminUsersTable()">
+          <button class="btn-primary" id="btn-export-users-csv" onclick="if(window.app) window.app.exportUsersCSV()"><i class="fa-solid fa-file-csv"></i> Export Users CSV</button>
         </div>
 
         <table style="width: 100%; border-collapse: collapse;">
@@ -279,7 +310,7 @@
     <div class="modal-card">
       <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
         <h3>Account Authentication</h3>
-        <button id="btn-close-auth" style="background: transparent; border: none; font-size: 1.2rem; cursor: pointer;"><i class="fa-solid fa-xmark"></i></button>
+        <button id="btn-close-auth" onclick="document.getElementById('auth-modal-overlay').style.display='none'" style="background: transparent; border: none; font-size: 1.2rem; cursor: pointer;"><i class="fa-solid fa-xmark"></i></button>
       </div>
 
       <div style="display: flex; gap: 1rem; margin-bottom: 1.5rem;">
@@ -290,7 +321,7 @@
 
       <form id="form-student-login">
         <input type="email" id="login-email" style="width: 100%; padding: 0.8rem; margin-bottom: 1rem; border-radius: 8px; border: 1px solid var(--border-color);" placeholder="student@dentistry.edu" required>
-        <input type="password" id="login-password" style="width: 100%; padding: 0.8rem; margin-bottom: 1rem; border-radius: 8px; border: 1px solid var(--border-color);" placeholder="â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢" required>
+        <input type="password" id="login-password" style="width: 100%; padding: 0.8rem; margin-bottom: 1rem; border-radius: 8px; border: 1px solid var(--border-color);" placeholder="••••••••" required>
         <button type="submit" class="btn-primary" style="width: 100%;">Login</button>
       </form>
 
@@ -298,13 +329,13 @@
         <input type="text" id="signup-name" style="width: 100%; padding: 0.8rem; margin-bottom: 1rem; border-radius: 8px; border: 1px solid var(--border-color);" placeholder="Full Name" required>
         <input type="email" id="signup-email" style="width: 100%; padding: 0.8rem; margin-bottom: 1rem; border-radius: 8px; border: 1px solid var(--border-color);" placeholder="student@dentistry.edu" required>
         <input type="text" id="signup-univid" style="width: 100%; padding: 0.8rem; margin-bottom: 1rem; border-radius: 8px; border: 1px solid var(--border-color);" placeholder="University ID">
-        <input type="password" id="signup-password" style="width: 100%; padding: 0.8rem; margin-bottom: 1rem; border-radius: 8px; border: 1px solid var(--border-color);" placeholder="â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢" required>
+        <input type="password" id="signup-password" style="width: 100%; padding: 0.8rem; margin-bottom: 1rem; border-radius: 8px; border: 1px solid var(--border-color);" placeholder="••••••••" required>
         <button type="submit" class="btn-primary" style="width: 100%;">Create Account</button>
       </form>
 
       <form id="form-admin-login" style="display: none;">
         <input type="email" id="admin-email" style="width: 100%; padding: 0.8rem; margin-bottom: 1rem; border-radius: 8px; border: 1px solid var(--border-color);" value="admin@dentistoire.edu" required>
-        <input type="password" id="admin-passkey" style="width: 100%; padding: 0.8rem; margin-bottom: 1rem; border-radius: 8px; border: 1px solid var(--border-color);" placeholder="â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢" required>
+        <input type="password" id="admin-passkey" style="width: 100%; padding: 0.8rem; margin-bottom: 1rem; border-radius: 8px; border: 1px solid var(--border-color);" placeholder="••••••••" required>
         <button type="submit" class="btn-primary" style="width: 100%;">Access Admin Hub</button>
       </form>
     </div>
@@ -312,36 +343,8 @@
 
   <div id="toast-container" style="position: fixed; bottom: 2rem; right: 2rem; z-index: 4000; display: flex; flex-direction: column; gap: 0.8rem;"></div>
 
-  <script src="i18n.js?v=639214910950994610"></script>
-  <script src="data.js?v=639214910950994610"></script>
-  <script src="app.js?v=639214910950994610"></script>
-
-  <!-- DELEGATED THEME TOGGLE LISTENER THAT WORKS 100% ON ALL LAPTOPS -->
-  <script>
-    document.addEventListener('DOMContentLoaded', function() {
-      const savedTheme = localStorage.getItem('dq_theme_v2') || 'theme-1';
-      document.body.className = savedTheme;
-
-      const label = document.getElementById('theme-btn-label-text');
-      if (label) {
-        label.textContent = savedTheme === 'theme-2' ? 'Switch to Theme 1' : 'Switch to Theme 2';
-      }
-
-      document.addEventListener('click', function(e) {
-        const btn = e.target.closest('#btn-theme-switcher');
-        if (btn) {
-          const isTheme2 = document.body.classList.contains('theme-2');
-          const nextTheme = isTheme2 ? 'theme-1' : 'theme-2';
-          
-          document.body.className = nextTheme;
-          localStorage.setItem('dq_theme_v2', nextTheme);
-          
-          if (label) {
-            label.textContent = nextTheme === 'theme-2' ? 'Switch to Theme 1' : 'Switch to Theme 2';
-          }
-        }
-      });
-    });
-  </script>
+  <script src="i18n.js?v=20260805_v5"></script>
+  <script src="data.js?v=20260805_v5"></script>
+  <script src="app.js?v=20260805_v5"></script>
 </body>
 </html>
