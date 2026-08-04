@@ -15,9 +15,7 @@ class ApplicationController {
     this.quizHistory = JSON.parse(localStorage.getItem("dq_history_v1")) || [];
     
     this.currentUser = JSON.parse(localStorage.getItem("dq_user_session_v1")) || null;
-    this.usersDatabase = JSON.parse(localStorage.getItem("dq_users_db_v1")) || INITIAL_USERS_DATABASE;
-
-    this.questions = INITIAL_DENTAL_QUESTIONS;
+    this.usersDatabase = JSON.parse(localStorage.getItem("dq_users_db_v1")) || (window.INITIAL_USERS_DATABASE || []);
 
     this.init();
   }
@@ -203,12 +201,16 @@ class ApplicationController {
     if (badge) badge.textContent = this.savedQuestions.length;
   }
 
+  getSubjects() {
+    return window.DENTISTOIRE_SUBJECTS || window.DENTAL_SUBJECTS_TAXONOMY || [];
+  }
+
   renderSubjectCards() {
     const grid = document.getElementById("subjects-grid");
     if (!grid) return;
     grid.innerHTML = "";
 
-    const subjects = window.DENTAL_SUBJECTS_TAXONOMY || window.DENTISTOIRE_SUBJECTS || [];
+    const subjects = this.getSubjects();
 
     subjects.forEach(subj => {
       const card = document.createElement("div");
@@ -220,7 +222,7 @@ class ApplicationController {
           <div style="font-size: 2.2rem; color: ${subj.color || 'var(--accent-primary)'}; margin-bottom: 0.8rem;">
             <i class="${subj.icon}"></i>
           </div>
-          <h3 style="font-family: 'Cormorant Garamond', serif; font-size: 1.5rem; margin-bottom: 0.4rem; color: var(--text-main);">${subj.title || subj.nameEn}</h3>
+          <h3 style="font-family: 'Cormorant Garamond', serif; font-size: 1.5rem; margin-bottom: 0.4rem; color: var(--text-main);">${subj.title}</h3>
           <p style="font-size: 0.88rem; color: var(--text-muted); line-height: 1.5; margin-bottom: 1.2rem;">${subj.description}</p>
           <div style="font-size: 0.8rem; font-weight: 700; color: var(--accent-primary); margin-bottom: 1.2rem;">
             <i class="fa-solid fa-file-lines"></i> ${subj.sheets.length} Lecture Sheets Available
@@ -233,7 +235,7 @@ class ApplicationController {
           </button>
           
           <button class="btn-secondary btn-start-lab-quiz" style="width: 100%; font-size: 0.88rem; background: var(--bg-primary); border: 1px solid var(--accent-primary); color: var(--text-main); font-weight: 700;">
-            <i class="fa-solid fa-flask"></i> ${subj.title || subj.nameEn} Lab
+            <i class="fa-solid fa-flask"></i> ${subj.title} Lab
           </button>
         </div>
       `;
@@ -243,8 +245,7 @@ class ApplicationController {
       });
 
       card.querySelector(".btn-start-lab-quiz").addEventListener("click", () => {
-        const qList = this.questions.filter(q => q.subjectId === subj.id);
-        this.startQuiz(qList.length > 0 ? qList : this.questions, `${subj.title || subj.nameEn} Laboratory Quiz`);
+        this.startSubjectLabQuiz(subj.id);
       });
 
       grid.appendChild(card);
@@ -252,15 +253,14 @@ class ApplicationController {
   }
 
   openSubjectExplorer(subjectId) {
-    const subjects = window.DENTAL_SUBJECTS_TAXONOMY || window.DENTISTOIRE_SUBJECTS || [];
-    const sub = subjects.find(s => s.id === subjectId);
+    const sub = this.getSubjects().find(s => s.id === subjectId);
     if (!sub) return;
 
     const container = document.getElementById("subject-explorer-content");
     const titleEl = document.getElementById("subject-explorer-title");
     if (!container || !titleEl) return;
 
-    titleEl.textContent = sub.title || sub.nameEn;
+    titleEl.textContent = sub.title;
 
     container.innerHTML = `
       <div style="margin-bottom: 2rem;">
@@ -269,14 +269,14 @@ class ApplicationController {
           ${sub.sheets.map(sheet => `
             <div style="background: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: 16px; padding: 1.5rem;">
               <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
-                <h4 style="font-size: 1.1rem; color: var(--text-main); font-weight: 700;">${sheet.title || sheet.titleEn}</h4>
+                <h4 style="font-size: 1.1rem; color: var(--text-main); font-weight: 700;">${sheet.title}</h4>
                 <span style="font-size: 0.8rem; background: var(--bg-primary); padding: 0.3rem 0.8rem; border-radius: 20px; color: var(--accent-primary); border: 1px solid var(--border-color); font-weight: 700;">
                   Lecture Sheet
                 </span>
               </div>
               <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 1rem;">${sheet.summary}</p>
               <button class="btn-primary" onclick="app.startSingleSheetQuiz('${sub.id}', '${sheet.id}')" style="padding: 0.5rem 1.2rem; font-size: 0.85rem;">
-                <i class="fa-solid fa-play"></i> Start ${sheet.title || sheet.titleEn} Lab Quiz
+                <i class="fa-solid fa-play"></i> Start ${sheet.title} Lab Quiz
               </button>
             </div>
           `).join('')}
@@ -287,9 +287,36 @@ class ApplicationController {
     this.switchTab("subjects-tab", document.getElementById("nav-subjects"));
   }
 
+  startSubjectLabQuiz(subjectId) {
+    const sub = this.getSubjects().find(s => s.id === subjectId);
+    if (!sub) return;
+
+    let questions = [];
+    sub.sheets.forEach(sheet => {
+      if (sheet.quizzes) {
+        sheet.quizzes.forEach(q => {
+          questions.push({ ...q, questionTextEn: q.question, optionsEn: q.options, correctOptionIndex: q.correctAnswer });
+        });
+      }
+    });
+
+    this.startQuiz(questions, `${sub.title} Laboratory Quiz`);
+  }
+
   startSingleSheetQuiz(subjectId, sheetId) {
-    const qList = this.questions.filter(q => q.subjectId === subjectId);
-    this.startQuiz(qList.length > 0 ? qList : this.questions, "Laboratory Quiz Sheet");
+    const sub = this.getSubjects().find(s => s.id === subjectId);
+    if (!sub) return;
+    const sheet = sub.sheets.find(sh => sh.id === sheetId);
+    if (!sheet || !sheet.quizzes) return;
+
+    const questions = sheet.quizzes.map(q => ({
+      ...q,
+      questionTextEn: q.question,
+      optionsEn: q.options,
+      correctOptionIndex: q.correctAnswer
+    }));
+
+    this.startQuiz(questions, `${sub.title} - ${sheet.title} Lab`);
   }
 
   handleSmartSearch(query) {
@@ -304,17 +331,17 @@ class ApplicationController {
     }
 
     const matches = [];
-    const subjects = window.DENTAL_SUBJECTS_TAXONOMY || window.DENTISTOIRE_SUBJECTS || [];
+    const subjects = this.getSubjects();
 
     subjects.forEach(subj => {
-      const name = (subj.title || subj.nameEn).toLowerCase();
+      const name = subj.title.toLowerCase();
       if (name.includes(qTrim)) {
-        matches.push({ type: "Subject", title: `${subj.title || subj.nameEn} Lab`, subjId: subj.id });
+        matches.push({ type: "Subject", title: `${subj.title} Lab`, subjId: subj.id });
       }
       subj.sheets.forEach(sheet => {
-        const sTitle = (sheet.title || sheet.titleEn).toLowerCase();
+        const sTitle = sheet.title.toLowerCase();
         if (sTitle.includes(qTrim)) {
-          matches.push({ type: "Lecture Sheet", title: `${subj.title || subj.nameEn} - ${sheet.title || sheet.titleEn}`, subjId: subj.id, sheetId: sheet.id });
+          matches.push({ type: "Lecture Sheet", title: `${subj.title} - ${sheet.title}`, subjId: subj.id, sheetId: sheet.id });
         }
       });
     });
@@ -373,18 +400,18 @@ class ApplicationController {
       const tr = document.createElement("tr");
       tr.style.borderBottom = "1px solid var(--border-color)";
       tr.innerHTML = `
-        <td style="padding: 0.8rem; font-weight: 700;">${usr.fullName}</td>
+        <td style="padding: 0.8rem; font-weight: 700;">${usr.fullName || usr.name}</td>
         <td style="padding: 0.8rem; color: var(--accent-primary); font-weight: 600;">${usr.email}</td>
-        <td style="padding: 0.8rem;">${usr.universityId}</td>
-        <td style="padding: 0.8rem;">${usr.regDate}</td>
-        <td style="padding: 0.8rem;"><span style="padding: 0.2rem 0.6rem; border-radius: 50px; font-size: 0.78rem; font-weight: 700; background: var(--border-color);">${usr.status}</span></td>
+        <td style="padding: 0.8rem;">${usr.universityId || usr.id}</td>
+        <td style="padding: 0.8rem;">${usr.regDate || usr.date || '2026-08-04'}</td>
+        <td style="padding: 0.8rem;"><span style="padding: 0.2rem 0.6rem; border-radius: 50px; font-size: 0.78rem; font-weight: 700; background: var(--border-color);">${usr.status || 'Active'}</span></td>
         <td style="padding: 0.8rem;">
           <button class="btn-secondary btn-delete-user" style="padding: 0.3rem 0.6rem; font-size: 0.78rem; color: #d46a6a;">Delete</button>
         </td>
       `;
 
       tr.querySelector(".btn-delete-user").addEventListener("click", () => {
-        if (confirm(`Delete user ${usr.fullName}?`)) {
+        if (confirm(`Delete user ${usr.fullName || usr.name}?`)) {
           this.usersDatabase.splice(idx, 1);
           localStorage.setItem("dq_users_db_v1", JSON.stringify(this.usersDatabase));
           this.renderAdminUsersTable();
@@ -399,7 +426,7 @@ class ApplicationController {
   exportUsersCSV() {
     let csv = "Full Name,Email,University ID,Registration Date,Status,Role\n";
     this.usersDatabase.forEach(u => {
-      csv += `"${u.fullName}","${u.email}","${u.universityId}","${u.regDate}","${u.status}","${u.role}"\n`;
+      csv += `"${u.fullName || u.name}","${u.email}","${u.universityId || u.id}","${u.regDate || '2026-08-04'}","${u.status || 'Active'}","${u.role || 'Student'}"\n`;
     });
 
     const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
