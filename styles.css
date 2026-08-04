@@ -1,8 +1,8 @@
 ﻿/* ==========================================================================
-   DENTISTOIRE - EXACT PHOTO 1 & PHOTO 2 THEME ENGINE
+   DENTISTOIRE - PRODUCTION MULTI-THEME ENGINE (v639214656910058600)
    ========================================================================== */
 
-/* THEME 1 (DEFAULT PHOTO 1 COZY CREAM & SEAMLESS BUNNY) */
+/* THEME 1 (PHOTO 1 COZY CREAM & SEAMLESS BUNNY) */
 body, body.theme-1 {
   background-color: #f9f0ea !important;
   color: #3d2626 !important;
@@ -103,7 +103,6 @@ body.theme-2 .btn-discover-services {
   box-shadow: 0 6px 20px rgba(198, 122, 50, 0.4) !important;
 }
 
-/* THEME 2 HIDES BUNNY RIGHT COLUMN EXACTLY LIKE PHOTO 2 */
 body.theme-2 .hero-right-col {
   display: none !important;
 }
@@ -277,7 +276,7 @@ main {
   align-items: center;
 }
 
-/* 100% SEAMLESS BUNNY ARTWORK BLEND INTO HOMEPAGE CANVAS */
+/* 100% SEAMLESS BUNNY ARTWORK BLEND WITH SOFT RADIAL MASK */
 .hero-bunny-illustration {
   width: 100%;
   max-width: 520px;
@@ -285,6 +284,8 @@ main {
   display: block;
   mix-blend-mode: multiply;
   filter: contrast(102%) brightness(99%);
+  -webkit-mask-image: radial-gradient(circle at center, black 70%, transparent 98%);
+  mask-image: radial-gradient(circle at center, black 70%, transparent 98%);
   background: transparent;
   border: none;
   box-shadow: none;
