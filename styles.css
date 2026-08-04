@@ -1,69 +1,127 @@
-﻿/* DENTISTOIRE MULTI-THEME ENGINE */
+﻿/* ==========================================================================
+   DENTISTOIRE - PRODUCTION MULTI-THEME ENGINE
+   Theme 1: Cozy Cream & Bunny (Photo 1)
+   Theme 2: Terracotta Amber & Sand (Photo 2)
+   ========================================================================== */
 
-/* THEME 1: COZY CREAM & BUNNY (PHOTO 1) */
-:root, [data-theme="theme-1"] {
+/* THEME 1 (DEFAULT) */
+body, body.theme-1 {
+  background-color: #f9f0ea !important;
+  color: #3d2626 !important;
   --bg-primary: #f9f0ea;
   --bg-secondary: #ffffff;
   --border-color: #eedcd3;
   --text-main: #3d2626;
   --text-muted: #684b4b;
   --accent-primary: #c58585;
-  --accent-primary-hover: #b06e6e;
-  --accent-glow: 0 8px 25px rgba(197, 133, 133, 0.25);
   --banner-bg: #ffffff;
   --banner-border: #eedcd3;
-  --banner-text: #3d2626;
 }
 
-/* THEME 2: TERRACOTTA AMBER & SAND (PHOTO 2) */
-[data-theme="theme-2"] {
+/* THEME 2 (TERRACOTTA AMBER DARK - PHOTO 2 REPLICA) */
+body.theme-2 {
+  background: linear-gradient(135deg, #dca877 0%, #d1955e 25%, #be7a3b 45%, #8c4d1d 65%, #42230e 85%, #211208 100%) !important;
+  background-attachment: fixed !important;
+  color: #1d130a !important;
   --bg-primary: #d5a372;
   --bg-secondary: #281b11;
   --border-color: #523b2b;
   --text-main: #1d130a;
   --text-muted: #4e3522;
   --accent-primary: #c67a32;
-  --accent-primary-hover: #a8611d;
-  --accent-glow: 0 8px 25px rgba(198, 122, 50, 0.35);
   --banner-bg: #21160d;
   --banner-border: #3d2919;
-  --banner-text: #f5e8dd;
 }
 
-[data-theme="theme-2"] body {
-  background: linear-gradient(135deg, #dca877 0%, #d1955e 25%, #be7a3b 45%, #8c4d1d 65%, #42230e 85%, #211208 100%) !important;
-  background-attachment: fixed !important;
+body.theme-2 header {
+  background: rgba(213, 163, 114, 0.88) !important;
+  border-bottom: 1px solid #be7a3b !important;
+}
+
+body.theme-2 .brand-title {
   color: #1d130a !important;
+  font-family: 'Quicksand', sans-serif !important;
+  font-weight: 900 !important;
+  letter-spacing: 3px !important;
 }
 
-[data-theme="theme-2"] .hero-bienvenue { color: #c67a32 !important; }
-[data-theme="theme-2"] .hero-dentistoire-title { color: #1d130a !important; font-family: 'Quicksand', sans-serif !important; font-weight: 900 !important; }
-[data-theme="theme-2"] .hero-description { color: #3b281b !important; }
-[data-theme="theme-2"] .btn-discover-services { background: #c67a32 !important; color: #1d130a !important; font-weight: 800 !important; border-radius: 4px !important; }
-[data-theme="theme-2"] .dentistoire-banner-card { background: #21160d !important; border: 1px solid #3d2919 !important; border-radius: 12px !important; }
-[data-theme="theme-2"] .banner-title { color: #c67a32 !important; }
-[data-theme="theme-2"] .banner-text { color: #c4b0a0 !important; }
-[data-theme="theme-2"] .banner-icon { color: #c67a32 !important; }
+body.theme-2 .tab-btn {
+  color: #3b281b !important;
+  font-family: 'Quicksand', sans-serif !important;
+}
 
-/* THEME 2 HIDES BUNNY RIGHT COL (BECAUSE PHOTO 2 HAS NO BUNNY) */
-[data-theme="theme-2"] .hero-right-col {
+body.theme-2 .tab-btn.active {
+  color: #c67a32 !important;
+  border-bottom: 2px solid #c67a32 !important;
+}
+
+body.theme-2 .hero-bienvenue {
+  color: #c67a32 !important;
+  font-family: 'Quicksand', sans-serif !important;
+  font-style: normal !important;
+}
+
+body.theme-2 .hero-dentistoire-title {
+  color: #1d130a !important;
+  font-family: 'Quicksand', sans-serif !important;
+  font-weight: 900 !important;
+  font-size: 4rem !important;
+  letter-spacing: 4px !important;
+}
+
+body.theme-2 .hero-description {
+  color: #3b281b !important;
+}
+
+body.theme-2 .btn-discover-services {
+  background: #c67a32 !important;
+  color: #1d130a !important;
+  font-weight: 800 !important;
+  border-radius: 4px !important;
+  box-shadow: 0 6px 20px rgba(198, 122, 50, 0.4) !important;
+}
+
+body.theme-2 .hero-right-col {
   display: none !important;
 }
 
-[data-theme="theme-2"] .dentistoire-hero-container {
+body.theme-2 .dentistoire-hero-container {
   grid-template-columns: 1fr !important;
-  max-width: 800px;
+  max-width: 800px !important;
 }
 
+body.theme-2 .dentistoire-banner-card {
+  background: #21160d !important;
+  border: 1px solid #3d2919 !important;
+  border-radius: 12px !important;
+}
+
+body.theme-2 .banner-title {
+  color: #c67a32 !important;
+}
+
+body.theme-2 .banner-text {
+  color: #c4b0a0 !important;
+}
+
+body.theme-2 .banner-icon {
+  color: #c67a32 !important;
+}
+
+body.theme-2 .subject-card {
+  background: #281b11 !important;
+  border: 1px solid #422d1d !important;
+  color: #f5e8dd !important;
+}
+
+/* CORE LAYOUT STYLING */
 * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Quicksand', sans-serif; }
 
 body {
-  background-color: var(--bg-primary);
-  color: var(--text-main);
   min-height: 100vh;
   display: flex;
   flex-direction: column;
-  transition: background 0.3s ease, color 0.3s ease;
+  transition: background 0.35s ease, color 0.35s ease;
 }
 
 header {
