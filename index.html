@@ -16,29 +16,110 @@
   <link rel="stylesheet" href="styles.css">
 
   <script>
-    // BULLETPROOF THEME TOGGLE SCRIPT
-    window.toggleDentistoireTheme = function() {
-      const current = document.documentElement.getAttribute('data-theme') || 'theme-1';
-      const next = current === 'theme-1' ? 'theme-2' : 'theme-1';
-      
-      document.documentElement.setAttribute('data-theme', next);
-      document.body.setAttribute('data-theme', next);
-      localStorage.setItem('dq_active_theme', next);
-      
-      const textEl = document.getElementById('theme-btn-text');
-      if (textEl) {
-        textEl.textContent = next === 'theme-1' ? 'Switch to Theme 2' : 'Switch to Theme 1';
+    // DYNAMIC THEME SWITCHER FUNCTION (100% RELIABLE ON ALL LAPTOPS)
+    window.switchTheme = function(themeId) {
+      localStorage.setItem('dq_active_theme', themeId);
+      document.documentElement.setAttribute('data-theme', themeId);
+      document.body.setAttribute('data-theme', themeId);
+
+      const oldStyle = document.getElementById('theme-override-style');
+      if (oldStyle) oldStyle.remove();
+
+      if (themeId === 'theme-2') {
+        const styleEl = document.createElement('style');
+        styleEl.id = 'theme-override-style';
+        styleEl.innerHTML = 
+          body {
+            background: linear-gradient(135deg, #dca877 0%, #d1955e 25%, #be7a3b 45%, #8c4d1d 65%, #42230e 85%, #211208 100%) !important;
+            background-attachment: fixed !important;
+            color: #1d130a !important;
+          }
+          header {
+            background: rgba(213, 163, 114, 0.85) !important;
+            border-bottom: 1px solid #be7a3b !important;
+          }
+          .brand-title {
+            color: #1d130a !important;
+            font-family: 'Quicksand', sans-serif !important;
+            font-weight: 900 !important;
+            letter-spacing: 3px !important;
+          }
+          .tab-btn {
+            color: #3b281b !important;
+            font-family: 'Quicksand', sans-serif !important;
+          }
+          .tab-btn.active {
+            color: #c67a32 !important;
+            border-bottom: 2px solid #c67a32 !important;
+          }
+          .hero-bienvenue {
+            color: #c67a32 !important;
+            font-family: 'Quicksand', sans-serif !important;
+            font-style: normal !important;
+          }
+          .hero-dentistoire-title {
+            color: #1d130a !important;
+            font-family: 'Quicksand', sans-serif !important;
+            font-weight: 900 !important;
+            font-size: 4rem !important;
+            letter-spacing: 4px !important;
+          }
+          .hero-description {
+            color: #3b281b !important;
+          }
+          .btn-discover-services {
+            background: #c67a32 !important;
+            color: #1d130a !important;
+            font-weight: 800 !important;
+            border-radius: 4px !important;
+            box-shadow: 0 6px 20px rgba(198, 122, 50, 0.4) !important;
+          }
+          .hero-right-col {
+            display: none !important;
+          }
+          .dentistoire-hero-container {
+            grid-template-columns: 1fr !important;
+            max-width: 800px !important;
+          }
+          .dentistoire-banner-card {
+            background: #21160d !important;
+            border: 1px solid #3d2919 !important;
+            border-radius: 12px !important;
+          }
+          .banner-title {
+            color: #c67a32 !important;
+          }
+          .banner-text {
+            color: #c4b0a0 !important;
+          }
+          .banner-icon {
+            color: #c67a32 !important;
+          }
+          .subject-card {
+            background: #281b11 !important;
+            border: 1px solid #422d1d !important;
+            color: #f5e8dd !important;
+          }
+        ;
+        document.head.appendChild(styleEl);
       }
     };
 
     // Restore saved theme on page load
-    (function() {
+    document.addEventListener('DOMContentLoaded', () => {
       const saved = localStorage.getItem('dq_active_theme') || 'theme-1';
-      document.documentElement.setAttribute('data-theme', saved);
-    })();
+      window.switchTheme(saved);
+    });
   </script>
 </head>
 <body>
+
+  <!-- FLOATING THEME SWITCHER WIDGET (VISIBLE AT BOTTOM RIGHT) -->
+  <div id="floating-theme-widget" style="position: fixed; bottom: 25px; right: 25px; z-index: 99999; background: rgba(0,0,0,0.85); color: #fff; padding: 10px 16px; border-radius: 50px; display: flex; align-items: center; gap: 10px; box-shadow: 0 10px 30px rgba(0,0,0,0.4); backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.2);">
+    <span style="font-size: 0.82rem; font-weight: 700; color: #ffeb3b;">ðŸŽ¨ SWITCH THEME:</span>
+    <button onclick="window.switchTheme('theme-1')" style="background: #f9f0ea; color: #3d2626; border: none; padding: 6px 14px; border-radius: 50px; font-weight: 800; cursor: pointer; font-size: 0.8rem;">ðŸŒ¸ Theme 1 (Cream)</button>
+    <button onclick="window.switchTheme('theme-2')" style="background: #c67a32; color: #1d130a; border: none; padding: 6px 14px; border-radius: 50px; font-weight: 800; cursor: pointer; font-size: 0.8rem;">ðŸªµ Theme 2 (Terracotta)</button>
+  </div>
 
   <!-- HEADER NAVBAR -->
   <header>
@@ -57,13 +138,15 @@
       </nav>
 
       <div class="header-actions">
-        <!-- INLINE ONCLICK THEME BUTTON -->
-        <button class="btn-primary" id="btn-toggle-theme-main" onclick="window.toggleDentistoireTheme()" style="padding: 0.6rem 1.3rem; font-size: 0.88rem; cursor: pointer; display: inline-flex; align-items: center; gap: 0.5rem; z-index: 999; position: relative;">
-          <i class="fa-solid fa-palette"></i>
-          <span id="theme-btn-text">Switch to Theme 2</span>
+        <!-- TOP HEADER THEME SWITCHER BUTTONS -->
+        <button class="btn-primary" onclick="window.switchTheme('theme-1')" style="padding: 0.45rem 0.95rem; font-size: 0.82rem; background: #f9f0ea; color: #3d2626; border: 1px solid #eedcd3;">
+          ðŸŒ¸ Theme 1
+        </button>
+        <button class="btn-primary" onclick="window.switchTheme('theme-2')" style="padding: 0.45rem 0.95rem; font-size: 0.82rem; background: #c67a32; color: #1d130a; border: none;">
+          ðŸªµ Theme 2
         </button>
 
-        <button class="btn-secondary" id="btn-open-auth" style="padding: 0.6rem 1.2rem; font-size: 0.85rem;">
+        <button class="btn-secondary" id="btn-open-auth" style="padding: 0.45rem 0.95rem; font-size: 0.82rem;">
           <i class="fa-solid fa-user-graduate"></i> <span id="header-user-name">Login</span>
         </button>
       </div>
