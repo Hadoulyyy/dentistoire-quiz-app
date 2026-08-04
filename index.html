@@ -14,6 +14,29 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
   <link rel="stylesheet" href="styles.css">
+
+  <script>
+    // BULLETPROOF THEME TOGGLE SCRIPT
+    window.toggleDentistoireTheme = function() {
+      const current = document.documentElement.getAttribute('data-theme') || 'theme-1';
+      const next = current === 'theme-1' ? 'theme-2' : 'theme-1';
+      
+      document.documentElement.setAttribute('data-theme', next);
+      document.body.setAttribute('data-theme', next);
+      localStorage.setItem('dq_active_theme', next);
+      
+      const textEl = document.getElementById('theme-btn-text');
+      if (textEl) {
+        textEl.textContent = next === 'theme-1' ? 'Switch to Theme 2' : 'Switch to Theme 1';
+      }
+    };
+
+    // Restore saved theme on page load
+    (function() {
+      const saved = localStorage.getItem('dq_active_theme') || 'theme-1';
+      document.documentElement.setAttribute('data-theme', saved);
+    })();
+  </script>
 </head>
 <body>
 
@@ -34,13 +57,13 @@
       </nav>
 
       <div class="header-actions">
-        <!-- BIG CLEAR THEME SWITCHER BUTTON -->
-        <button class="btn-primary" id="btn-toggle-theme-main" style="padding: 0.55rem 1.2rem; font-size: 0.88rem; cursor: pointer; display: inline-flex; align-items: center; gap: 0.5rem;">
+        <!-- INLINE ONCLICK THEME BUTTON -->
+        <button class="btn-primary" id="btn-toggle-theme-main" onclick="window.toggleDentistoireTheme()" style="padding: 0.6rem 1.3rem; font-size: 0.88rem; cursor: pointer; display: inline-flex; align-items: center; gap: 0.5rem; z-index: 999; position: relative;">
           <i class="fa-solid fa-palette"></i>
           <span id="theme-btn-text">Switch to Theme 2</span>
         </button>
 
-        <button class="btn-secondary" id="btn-open-auth" style="padding: 0.55rem 1.1rem; font-size: 0.85rem;">
+        <button class="btn-secondary" id="btn-open-auth" style="padding: 0.6rem 1.2rem; font-size: 0.85rem;">
           <i class="fa-solid fa-user-graduate"></i> <span id="header-user-name">Login</span>
         </button>
       </div>
