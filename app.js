@@ -1,6 +1,6 @@
 ﻿/**
  * DentaQuiz Studio - Main Application Controller
- * Features Theme 1 & 2 infrastructure, Secure Admin User Management, Smart Search, and Laboratory Quiz Engine.
+ * Features Theme 1 (Cream & Bunny) & Theme 2 (Terracotta Dark), Secure Admin User Management, Smart Search, and Laboratory Quiz Engine.
  */
 
 class ApplicationController {
@@ -40,9 +40,12 @@ class ApplicationController {
     localStorage.setItem("dq_active_theme", themeId);
     document.documentElement.setAttribute("data-theme", themeId);
 
-    const btnLabel = document.getElementById("theme-btn-label");
-    if (btnLabel) {
-      btnLabel.textContent = themeId === "theme-1" ? "Theme 1" : "Theme 2";
+    const btn1 = document.getElementById("btn-pill-theme-1");
+    const btn2 = document.getElementById("btn-pill-theme-2");
+
+    if (btn1 && btn2) {
+      btn1.classList.toggle("active", themeId === "theme-1");
+      btn2.classList.toggle("active", themeId === "theme-2");
     }
   }
 
@@ -55,12 +58,20 @@ class ApplicationController {
   }
 
   setupEventListeners() {
-    const btnToggleTheme = document.getElementById("btn-toggle-theme");
-    if (btnToggleTheme) {
-      btnToggleTheme.addEventListener("click", () => {
-        const nextTheme = this.currentTheme === "theme-1" ? "theme-2" : "theme-1";
-        this.applyTheme(nextTheme);
-        this.showToast(Switched to \);
+    const btnTheme1 = document.getElementById("btn-pill-theme-1");
+    const btnTheme2 = document.getElementById("btn-pill-theme-2");
+
+    if (btnTheme1) {
+      btnTheme1.addEventListener("click", () => {
+        this.applyTheme("theme-1");
+        this.showToast("Theme 1 (Cozy Cream & Bunny) activated!");
+      });
+    }
+
+    if (btnTheme2) {
+      btnTheme2.addEventListener("click", () => {
+        this.applyTheme("theme-2");
+        this.showToast("Theme 2 (Terracotta Amber Dark) activated!");
       });
     }
 
@@ -112,12 +123,6 @@ class ApplicationController {
     document.getElementById("btn-back-dashboard")?.addEventListener("click", () => this.switchTab("home-tab", document.getElementById("nav-home")));
 
     document.getElementById("btn-bookmark-current")?.addEventListener("click", () => this.toggleBookmarkCurrent());
-
-    document.getElementById("btn-back-subjects-list")?.addEventListener("click", () => {
-      this.currentSubjectId = null;
-      document.getElementById("btn-back-subjects-list").style.display = "none";
-      this.renderSubjectExplorer(null);
-    });
 
     this.setupAdminDatabaseEvents();
   }
@@ -194,7 +199,7 @@ class ApplicationController {
         this.checkAdminRouteGuard();
         this.renderHeaderProfile();
         authOverlay.style.display = "none";
-        this.showToast(Account created successfully! Welcome );
+        this.showToast(Account created successfully! Welcome \);
       });
     }
 
@@ -298,13 +303,11 @@ class ApplicationController {
 
     const matches = [];
 
-    // 1. Search Subjects & Lab Quizzes
     DENTAL_SUBJECTS_TAXONOMY.forEach(subj => {
       if (subj.nameEn.toLowerCase().includes(qTrim) || subj.labQuizNameEn.toLowerCase().includes(qTrim)) {
         matches.push({ type: "Subject", title: subj.labQuizNameEn, subjId: subj.id });
       }
 
-      // 2. Search Sheets
       subj.sheets.forEach(sheet => {
         if (sheet.titleEn.toLowerCase().includes(qTrim)) {
           matches.push({ type: "Lecture Sheet", title: \ - \, subjId: subj.id, sheetId: sheet.id });
@@ -346,7 +349,6 @@ class ApplicationController {
     section.style.display = "block";
   }
 
-  /* SECURE ADMIN USER DATABASE MANAGEMENT */
   setupAdminDatabaseEvents() {
     const btnExportCsv = document.getElementById("btn-export-users-csv");
     if (btnExportCsv) {
