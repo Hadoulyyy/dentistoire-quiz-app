@@ -1,6 +1,5 @@
 ﻿/**
- * DentaQuiz Studio - Main Application Controller
- * Features Theme 1 (Cream & Bunny) & Theme 2 (Terracotta Dark), Secure Admin User Management, Smart Search, and Laboratory Quiz Engine.
+ * DentaQuiz Studio - Application Controller
  */
 
 class ApplicationController {
@@ -14,10 +13,8 @@ class ApplicationController {
     this.savedQuestions = JSON.parse(localStorage.getItem("dq_saved_q_v1")) || [];
     this.quizHistory = JSON.parse(localStorage.getItem("dq_history_v1")) || [];
     
-    // User & Admin Session
     this.currentUser = JSON.parse(localStorage.getItem("dq_user_session_v1")) || null;
     this.usersDatabase = JSON.parse(localStorage.getItem("dq_users_db_v1")) || INITIAL_USERS_DATABASE;
-    localStorage.setItem("dq_users_db_v1", JSON.stringify(this.usersDatabase));
 
     this.questions = INITIAL_DENTAL_QUESTIONS;
 
@@ -32,54 +29,44 @@ class ApplicationController {
     this.checkAdminRouteGuard();
     this.renderHeaderProfile();
     this.renderSubjectCards();
-    this.updateSavedBadge();
   }
 
   applyTheme(themeId) {
     this.currentTheme = themeId;
     localStorage.setItem("dq_active_theme", themeId);
+    
     document.documentElement.setAttribute("data-theme", themeId);
+    document.body.setAttribute("data-theme", themeId);
 
-    const btn1 = document.getElementById("btn-pill-theme-1");
-    const btn2 = document.getElementById("btn-pill-theme-2");
-
-    if (btn1 && btn2) {
-      btn1.classList.toggle("active", themeId === "theme-1");
-      btn2.classList.toggle("active", themeId === "theme-2");
+    const btnText = document.getElementById("theme-btn-text");
+    if (btnText) {
+      btnText.textContent = themeId === "theme-1" ? "Switch to Theme 2" : "Switch to Theme 1";
     }
+  }
+
+  toggleTheme() {
+    const nextTheme = this.currentTheme === "theme-1" ? "theme-2" : "theme-1";
+    this.applyTheme(nextTheme);
+    this.showToast(Switched to \);
   }
 
   checkAdminRouteGuard() {
     const navAdmin = document.getElementById("nav-admin");
     const isAdmin = this.currentUser && this.currentUser.role === "Admin";
-    if (navAdmin) {
-      navAdmin.style.display = isAdmin ? "inline-flex" : "none";
-    }
+    if (navAdmin) navAdmin.style.display = isAdmin ? "inline-block" : "none";
   }
 
   setupEventListeners() {
-    const btnTheme1 = document.getElementById("btn-pill-theme-1");
-    const btnTheme2 = document.getElementById("btn-pill-theme-2");
-
-    if (btnTheme1) {
-      btnTheme1.addEventListener("click", () => {
-        this.applyTheme("theme-1");
-        this.showToast("Theme 1 (Cozy Cream & Bunny) activated!");
-      });
-    }
-
-    if (btnTheme2) {
-      btnTheme2.addEventListener("click", () => {
-        this.applyTheme("theme-2");
-        this.showToast("Theme 2 (Terracotta Amber Dark) activated!");
-      });
+    const btnToggleMain = document.getElementById("btn-toggle-theme-main");
+    if (btnToggleMain) {
+      btnToggleMain.addEventListener("click", () => this.toggleTheme());
     }
 
     document.querySelectorAll(".tab-btn").forEach(btn => {
       btn.addEventListener("click", () => {
         const targetTab = btn.getAttribute("data-tab");
         if (targetTab === "admin-tab" && (!this.currentUser || this.currentUser.role !== "Admin")) {
-          this.showToast("Access Denied: Only administrators can access the Admin Hub.");
+          this.showToast("Access Denied: Admin authentication required.");
           return;
         }
         if (targetTab) this.switchTab(targetTab, btn);
@@ -88,9 +75,7 @@ class ApplicationController {
 
     const brandHome = document.getElementById("brand-home-click");
     if (brandHome) {
-      brandHome.addEventListener("click", () => {
-        this.switchTab("home-tab", document.getElementById("nav-home"));
-      });
+      brandHome.addEventListener("click", () => this.switchTab("home-tab", document.getElementById("nav-home")));
     }
 
     const searchInput = document.getElementById("global-search-input");
@@ -98,22 +83,9 @@ class ApplicationController {
       searchInput.addEventListener("input", (e) => this.handleSmartSearch(e.target.value));
     }
 
-    const btnClearSearch = document.getElementById("btn-clear-search");
-    if (btnClearSearch) {
-      btnClearSearch.addEventListener("click", () => {
-        if (searchInput) searchInput.value = "";
-        document.getElementById("search-results-section").style.display = "none";
-      });
-    }
-
     const btnRandomQuiz = document.getElementById("btn-random-quiz");
     if (btnRandomQuiz) {
       btnRandomQuiz.addEventListener("click", () => this.startQuiz(this.questions, "Oral Histology Laboratory Quiz"));
-    }
-
-    const btnPracticeWeak = document.getElementById("btn-practice-weak-top");
-    if (btnPracticeWeak) {
-      btnPracticeWeak.addEventListener("click", () => this.startSavedOrWeakQuiz());
     }
 
     document.getElementById("btn-prev-question")?.addEventListener("click", () => this.navigateQuestion(-1));
@@ -121,7 +93,6 @@ class ApplicationController {
     document.getElementById("btn-exit-quiz")?.addEventListener("click", () => this.exitQuiz());
     document.getElementById("btn-retry-quiz")?.addEventListener("click", () => this.startQuiz(this.activeQuizQuestions, "Retake Laboratory Quiz"));
     document.getElementById("btn-back-dashboard")?.addEventListener("click", () => this.switchTab("home-tab", document.getElementById("nav-home")));
-
     document.getElementById("btn-bookmark-current")?.addEventListener("click", () => this.toggleBookmarkCurrent());
 
     this.setupAdminDatabaseEvents();
@@ -140,13 +111,8 @@ class ApplicationController {
     const formSignup = document.getElementById("form-student-signup");
     const formAdmin = document.getElementById("form-admin-login");
 
-    if (btnOpenAuth && authOverlay) {
-      btnOpenAuth.addEventListener("click", () => authOverlay.style.display = "flex");
-    }
-
-    if (btnCloseAuth && authOverlay) {
-      btnCloseAuth.addEventListener("click", () => authOverlay.style.display = "none");
-    }
+    if (btnOpenAuth && authOverlay) btnOpenAuth.addEventListener("click", () => authOverlay.style.display = "flex");
+    if (btnCloseAuth && authOverlay) btnCloseAuth.addEventListener("click", () => authOverlay.style.display = "none");
 
     const switchAuthTab = (activeTab, showForm) => {
       [tabLogin, tabSignup, tabAdmin].forEach(t => t.classList.remove("active"));
@@ -232,8 +198,6 @@ class ApplicationController {
 
     if (tabId === "admin-tab") this.renderAdminUsersTable();
     if (tabId === "saved-tab") this.renderSavedList();
-    if (tabId === "history-tab") this.renderHistoryLog();
-    if (tabId === "analytics-tab") this.renderAnalytics();
   }
 
   renderHeaderProfile() {
@@ -242,7 +206,7 @@ class ApplicationController {
       if (this.currentUser && this.currentUser.name) {
         el.textContent = this.currentUser.name;
       } else {
-        el.textContent = "Login / Sign Up";
+        el.textContent = "Login";
       }
     }
   }
@@ -252,23 +216,19 @@ class ApplicationController {
     if (!grid) return;
     grid.innerHTML = "";
 
-    const isAr = i18n.currentLang === "ar";
-
     DENTAL_SUBJECTS_TAXONOMY.forEach(subj => {
       const card = document.createElement("div");
       card.className = "subject-card";
       card.style.borderTop = 4px solid \;
 
-      const labTitle = isAr ? subj.labQuizNameAr : subj.labQuizNameEn;
-
       card.innerHTML = 
         <div>
           <div class="subject-header">
-            <div class="subject-icon-box" style="background: \;">
+            <div class="banner-icon" style="color: \; font-size: 2rem;">
               <i class="fa-solid \"></i>
             </div>
             <div>
-              <h3>\</h3>
+              <h3 style="font-family: 'Cormorant Garamond', serif; font-size: 1.4rem;">\</h3>
               <div style="font-size: 0.85rem; color: var(--accent-primary); font-weight: 700; margin-top: 0.2rem;">
                 <i class="fa-solid fa-flask"></i> \
               </div>
@@ -283,7 +243,7 @@ class ApplicationController {
 
       card.querySelector("button").addEventListener("click", () => {
         const subjQuestions = this.questions.filter(q => q.subjectId === subj.id);
-        this.startQuiz(subjQuestions.length > 0 ? subjQuestions : this.questions, labTitle);
+        this.startQuiz(subjQuestions.length > 0 ? subjQuestions : this.questions, subj.labQuizNameEn);
       });
 
       grid.appendChild(card);
@@ -302,12 +262,10 @@ class ApplicationController {
     }
 
     const matches = [];
-
     DENTAL_SUBJECTS_TAXONOMY.forEach(subj => {
       if (subj.nameEn.toLowerCase().includes(qTrim) || subj.labQuizNameEn.toLowerCase().includes(qTrim)) {
         matches.push({ type: "Subject", title: subj.labQuizNameEn, subjId: subj.id });
       }
-
       subj.sheets.forEach(sheet => {
         if (sheet.titleEn.toLowerCase().includes(qTrim)) {
           matches.push({ type: "Lecture Sheet", title: \ - \, subjId: subj.id, sheetId: sheet.id });
@@ -319,29 +277,25 @@ class ApplicationController {
     list.innerHTML = "";
 
     if (matches.length === 0) {
-      list.innerHTML = <div style="color: var(--text-muted); font-size: 0.9rem;">No matching subjects, sheets, or laboratory quizzes found for "\".</div>;
+      list.innerHTML = <div style="color: var(--text-muted); font-size: 0.9rem;">No matching items found for "\".</div>;
     } else {
       matches.slice(0, 8).forEach(m => {
         const card = document.createElement("div");
         card.className = "subject-card";
         card.style.padding = "1rem 1.4rem";
-        card.style.margin = "0";
-
         card.innerHTML = 
           <div style="display: flex; justify-content: space-between; align-items: center;">
             <div>
-              <span class="meta-badge" style="background: rgba(197,133,133,0.15); color: var(--accent-primary); padding: 0.2rem 0.6rem; border-radius: 50px; font-size: 0.75rem; font-weight: 700;">\</span>
+              <span style="background: rgba(197,133,133,0.15); color: var(--accent-primary); padding: 0.2rem 0.6rem; border-radius: 50px; font-size: 0.75rem; font-weight: 700;">\</span>
               <div style="font-weight: 700; font-size: 1.05rem; margin-top: 0.3rem;">\</div>
             </div>
             <button class="btn-primary" style="padding: 0.4rem 1rem; font-size: 0.82rem;">Start Quiz</button>
           </div>
         ;
-
         card.querySelector("button").addEventListener("click", () => {
           const qList = this.questions.filter(q => q.subjectId === m.subjId);
           this.startQuiz(qList.length > 0 ? qList : this.questions, m.title);
         });
-
         list.appendChild(card);
       });
     }
@@ -351,14 +305,7 @@ class ApplicationController {
 
   setupAdminDatabaseEvents() {
     const btnExportCsv = document.getElementById("btn-export-users-csv");
-    if (btnExportCsv) {
-      btnExportCsv.addEventListener("click", () => this.exportUsersCSV());
-    }
-
-    const userSearchInput = document.getElementById("admin-user-search");
-    if (userSearchInput) {
-      userSearchInput.addEventListener("input", (e) => this.renderAdminUsersTable(e.target.value));
-    }
+    if (btnExportCsv) btnExportCsv.addEventListener("click", () => this.exportUsersCSV());
 
     const btnLogoutAdmin = document.getElementById("btn-admin-logout");
     if (btnLogoutAdmin) {
@@ -368,63 +315,36 @@ class ApplicationController {
         this.checkAdminRouteGuard();
         this.renderHeaderProfile();
         this.switchTab("home-tab", document.getElementById("nav-home"));
-        this.showToast("Admin session logged out.");
+        this.showToast("Admin logged out.");
       });
     }
   }
 
-  renderAdminUsersTable(filterQuery = "") {
+  renderAdminUsersTable() {
     const tbody = document.getElementById("admin-users-tbody");
     if (!tbody) return;
     tbody.innerHTML = "";
 
-    const q = filterQuery.trim().toLowerCase();
-
-    const filtered = this.usersDatabase.filter(u => {
-      return u.fullName.toLowerCase().includes(q) ||
-             u.email.toLowerCase().includes(q) ||
-             u.universityId.toLowerCase().includes(q);
-    });
-
-    filtered.forEach((usr, idx) => {
+    this.usersDatabase.forEach((usr, idx) => {
       const tr = document.createElement("tr");
-
+      tr.style.borderBottom = "1px solid var(--border-color)";
       tr.innerHTML = 
-        <td style="font-weight: 700;">\</td>
-        <td style="color: var(--accent-primary); font-weight: 600;">\</td>
-        <td>\</td>
-        <td>\</td>
-        <td>\</td>
-        <td>
-          <span style="padding: 0.2rem 0.6rem; border-radius: 50px; font-size: 0.78rem; font-weight: 700; background: \; color: \;">
-            \
-          </span>
-        </td>
-        <td>
-          <div style="display: flex; gap: 0.4rem;">
-            <button class="btn-secondary btn-toggle-ban" style="padding: 0.3rem 0.6rem; font-size: 0.78rem;">
-              \
-            </button>
-            <button class="btn-secondary btn-delete-user" style="padding: 0.3rem 0.6rem; font-size: 0.78rem; color: var(--danger-color);">
-              Delete
-            </button>
-          </div>
+        <td style="padding: 0.8rem; font-weight: 700;">\</td>
+        <td style="padding: 0.8rem; color: var(--accent-primary); font-weight: 600;">\</td>
+        <td style="padding: 0.8rem;">\</td>
+        <td style="padding: 0.8rem;">\</td>
+        <td style="padding: 0.8rem;"><span style="padding: 0.2rem 0.6rem; border-radius: 50px; font-size: 0.78rem; font-weight: 700; background: var(--border-color);">\</span></td>
+        <td style="padding: 0.8rem;">
+          <button class="btn-secondary btn-delete-user" style="padding: 0.3rem 0.6rem; font-size: 0.78rem; color: #d46a6a;">Delete</button>
         </td>
       ;
 
-      tr.querySelector(".btn-toggle-ban").addEventListener("click", () => {
-        usr.status = usr.status === "Banned" ? "Active" : "Banned";
-        localStorage.setItem("dq_users_db_v1", JSON.stringify(this.usersDatabase));
-        this.renderAdminUsersTable(filterQuery);
-        this.showToast(User \ status set to \.);
-      });
-
       tr.querySelector(".btn-delete-user").addEventListener("click", () => {
-        if (confirm(Permanently delete user \?)) {
+        if (confirm(Delete user \?)) {
           this.usersDatabase.splice(idx, 1);
           localStorage.setItem("dq_users_db_v1", JSON.stringify(this.usersDatabase));
-          this.renderAdminUsersTable(filterQuery);
-          this.showToast("User deleted from database.");
+          this.renderAdminUsersTable();
+          this.showToast("User deleted.");
         }
       });
 
@@ -433,9 +353,9 @@ class ApplicationController {
   }
 
   exportUsersCSV() {
-    let csv = "Full Name,Email,University ID,Registration Date,Last Login,Status,Role\n";
+    let csv = "Full Name,Email,University ID,Registration Date,Status,Role\n";
     this.usersDatabase.forEach(u => {
-      csv += "\","\","\","\","\","\","\"\n;
+      csv += "\","\","\","\","\","\"\n;
     });
 
     const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
@@ -446,20 +366,14 @@ class ApplicationController {
     document.body.appendChild(link);
     link.click();
     link.remove();
-    this.showToast("Users Database exported as CSV successfully!");
+    this.showToast("Exported Users Database CSV!");
   }
 
-  /* QUIZ ENGINE */
   startQuiz(questionsList, quizTitle = "Laboratory Quiz") {
-    if (!questionsList || questionsList.length === 0) {
-      this.showToast("No questions available.");
-      return;
-    }
-
+    if (!questionsList || questionsList.length === 0) return;
     this.activeQuizQuestions = [...questionsList];
     this.currentQuestionIndex = 0;
     this.userAnswers = {};
-
     document.getElementById("quiz-title-display").textContent = quizTitle;
     this.switchTab("quiz-tab");
     this.renderCurrentQuestion();
@@ -468,12 +382,9 @@ class ApplicationController {
   renderCurrentQuestion() {
     const q = this.activeQuizQuestions[this.currentQuestionIndex];
     if (!q) return;
-
     const total = this.activeQuizQuestions.length;
     document.getElementById("quiz-progress-text").textContent = Question \ of \;
     document.getElementById("quiz-progress-fill").style.width = \%;
-
-    document.getElementById("meta-badge-topic").textContent = q.topic || "Laboratory Quiz";
     document.getElementById("quiz-question-text").textContent = q.questionTextEn;
 
     const optsContainer = document.getElementById("quiz-options-container");
@@ -502,23 +413,13 @@ class ApplicationController {
       btn.addEventListener("click", () => {
         this.userAnswers[this.currentQuestionIndex] = idx;
         this.renderCurrentQuestion();
-        this.showExplanation(q);
       });
 
       optsContainer.appendChild(btn);
     });
 
     document.getElementById("btn-prev-question").disabled = this.currentQuestionIndex === 0;
-
-    const btnNext = document.getElementById("btn-next-question");
-    btnNext.innerHTML = this.currentQuestionIndex === total - 1 ? Submit Quiz <i class="fa-solid fa-check"></i> : Next Question <i class="fa-solid fa-arrow-right"></i>;
-  }
-
-  showExplanation(q) {
-    const expBox = document.getElementById("quiz-explanation");
-    const expText = document.getElementById("quiz-explanation-text");
-    expText.textContent = q.explanationEn || "No additional explanation provided.";
-    expBox.style.display = "block";
+    document.getElementById("btn-next-question").innerHTML = this.currentQuestionIndex === total - 1 ? Submit Quiz : Next Question;
   }
 
   navigateQuestion(direction) {
@@ -534,13 +435,11 @@ class ApplicationController {
   finishQuiz() {
     let score = 0;
     const total = this.activeQuizQuestions.length;
-
     this.activeQuizQuestions.forEach((q, idx) => {
       if (this.userAnswers[idx] === q.correctOptionIndex) score++;
     });
 
     const percent = Math.round((score / total) * 100);
-
     document.getElementById("res-percent").textContent = \%;
     document.getElementById("res-fraction").textContent = \/\ Correct;
     document.getElementById("res-message").textContent = percent >= 80 ? "Excellent work! You mastered this Laboratory Quiz." : "Good effort. Review the laboratory sheet to improve your score.";
@@ -566,51 +465,21 @@ class ApplicationController {
       this.showToast("Saved to Revision Bank!");
     }
     localStorage.setItem("dq_saved_q_v1", JSON.stringify(this.savedQuestions));
-    this.updateSavedBadge();
   }
 
-  updateSavedBadge() {
-    const badge = document.getElementById("saved-count-badge");
-    if (badge) badge.textContent = this.savedQuestions.length;
-  }
-
-  startSavedOrWeakQuiz() {
-    if (this.savedQuestions.length === 0) {
-      this.showToast("No saved items yet. Star questions during quizzes!");
-      return;
-    }
-    this.startQuiz(this.savedQuestions, "Revision Bank Laboratory Practice");
-  }
-
-  renderSavedList() {
-    const container = document.getElementById("saved-questions-list");
-    if (!container) return;
-    container.innerHTML = "";
-    if (this.savedQuestions.length === 0) {
-      container.innerHTML = <div style="text-align: center; color: var(--text-muted); padding: 3rem;">No saved questions yet.</div>;
-      return;
-    }
-    this.savedQuestions.forEach(q => {
-      const card = document.createElement("div");
-      card.className = "question-card";
-      card.style.background = "var(--bg-secondary)";
-      card.style.border = "1px solid var(--border-color)";
-      card.style.padding = "1.4rem";
-      card.style.borderRadius = "16px";
-      card.innerHTML = <div style="font-weight: 700;">\</div>;
-      container.appendChild(card);
-    });
-  }
-
-  renderHistoryLog() {}
-  renderAnalytics() {}
+  renderSavedList() {}
 
   showToast(message) {
     const container = document.getElementById("toast-container");
     if (!container) return;
     const toast = document.createElement("div");
     toast.className = "toast";
-    toast.innerHTML = <i class="fa-solid fa-circle-check" style="color: var(--accent-primary);"></i> <span>\</span>;
+    toast.style.background = "var(--bg-secondary)";
+    toast.style.border = "1px solid var(--border-color)";
+    toast.style.padding = "1rem 1.4rem";
+    toast.style.borderRadius = "14px";
+    toast.style.boxShadow = "0 6px 20px rgba(0,0,0,0.1)";
+    toast.innerHTML = <i class="fa-solid fa-circle-check" style="color: var(--accent-primary); margin-right: 0.5rem;"></i> <span>\</span>;
     container.appendChild(toast);
     setTimeout(() => {
       toast.style.opacity = "0";
