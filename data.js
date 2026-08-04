@@ -1,303 +1,201 @@
 /**
- * DentaQuiz Studio - Official Academic Dental Curriculum Database
- * Contains exact 88 Lecture Sheets across all 7 Second-Year Dental Subjects as specified.
+ * Dentistoire Official Dental Curriculum Database
+ * Includes 88 Lecture Sheets & Laboratory Quizzes across all dental subjects.
  */
 
 const DENTAL_SUBJECTS_TAXONOMY = [
   {
     id: "subj_oral_histology",
-    nameEn: "Oral Histology",
-    nameAr: "أنسجة الفم",
-    icon: "fa-tooth",
-    color: "#D99BA5",
+    title: "Oral Histology",
+    titleAr: "أنسجة الفم",
+    labQuizName: "Oral Histology Laboratory Quiz",
+    icon: "fa-solid fa-microscope",
+    description: "Study of microanatomy of oral tissues, enamel, dentin, pulp, PDL, alveolar bone, and mucosa.",
     sheets: [
-      { id: "oh_s1", titleEn: "Embriology", titleAr: "شيت 1: علم الأجنة" },
-      { id: "oh_s2", titleEn: "Development of the face", titleAr: "شيت 2: تطور الوجه" },
-      { id: "oh_s3", titleEn: "Development of the mouth", titleAr: "شيت 3: تطور الفم" },
-      { id: "oh_s4", titleEn: "Tooth development and growth", titleAr: "شيت 4: نمو وتطور الأسنان" },
-      { id: "oh_s5", titleEn: "Enamel", titleAr: "شيت 5: المينا" },
-      { id: "oh_s6", titleEn: "Dentin", titleAr: "شيت 6: العاج" },
-      { id: "oh_s7", titleEn: "Cementum", titleAr: "شيت 7: الملاط" },
-      { id: "oh_s8", titleEn: "Dental pulp", titleAr: "شيت 8: لب الأسنان" },
-      { id: "oh_s9", titleEn: "PDL", titleAr: "شيت 9: الرباط السني المقوم" },
-      { id: "oh_s10", titleEn: "Alveolar bone", titleAr: "شيت 10: العظم السنخي" },
-      { id: "oh_s11", titleEn: "Maxillary sinus", titleAr: "شيت 11: الجيب الفكي العلوي" },
-      { id: "oh_s12", titleEn: "Eruption and shedding", titleAr: "شيت 12: البزوغ والتبديل" },
-      { id: "oh_s13", titleEn: "TMJ", titleAr: "شيت 13: المفصل الفكي الصدغي" },
-      { id: "oh_s14", titleEn: "Oral mucosa & Gingiva", titleAr: "شيت 14: مخاطية الفم واللثة" },
-      { id: "oh_s15", titleEn: "Salivary glands & Tonsils", titleAr: "شيت 15: الغدد اللعابية واللوزتين" }
+      { id: "oh_s1", title: "Embriology", summary: "General embryonic development of head and neck structures." },
+      { id: "oh_s2", title: "Development of the face", summary: "Development of facial processes, maxilla, and mandible." },
+      { id: "oh_s3", title: "Development of the mouth", summary: "Primary oral cavity and palate formation." },
+      { id: "oh_s4", title: "Tooth development and growth", summary: "Bud, cap, bell stages, and root formation." },
+      { id: "oh_s5", title: "Enamel", summary: "Amelogenesis, enamel rods, lines of Retzius, and mineralization." },
+      { id: "oh_s6", title: "Dentin", summary: "Dentinogenesis, dentinal tubules, primary, secondary, and tertiary dentin." },
+      { id: "oh_s7", title: "Cementum", summary: "Acellular and cellular cementum, CDEJ, and fibers attachment." },
+      { id: "oh_s8", title: "Dental pulp", summary: "Pulp zones, fibroblasts, odontoblasts, blood vessels, and nerve supply." },
+      { id: "oh_s9", title: "PDL", summary: "Periodontal ligament principal fiber groups, cells, and blood supply." },
+      { id: "oh_s10", title: "Alveolar bone", summary: "Cortical plate, trabecular bone, bundle bone, and remodeling." },
+      { id: "oh_s11", title: "Maxillary sinus", summary: "Histology of Schneiderian membrane and sinus relations." },
+      { id: "oh_s12", title: "Eruption and shedding", summary: "Mechanism of tooth eruption, osteoclasts, and primary shedding." },
+      { id: "oh_s13", title: "TMJ", summary: "Histology of condyle, articular disc, and synovial membrane." },
+      { id: "oh_s14", title: "Oral mucosa & Gingiva", summary: "Masticatory, lining, and specialized oral mucosa." },
+      { id: "oh_s15", title: "Salivary glands & Tonsils", summary: "Serous and mucous acini, ducts, and lymphoid tonsillar tissue." }
     ]
   },
   {
     id: "subj_crown_bridge",
-    nameEn: "Crown and Bridge",
-    nameAr: "الاستعاضة الثابتة",
-    icon: "fa-crown",
-    color: "#A694B8",
+    title: "Crown and Bridge",
+    titleAr: "الاستعاضة الثابتة",
+    labQuizName: "Crown and Bridge Laboratory Quiz",
+    icon: "fa-solid fa-crown",
+    description: "Principles of fixed prosthodontics, crown preparations, impression techniques, and bridgework.",
     sheets: [
-      { id: "cb_s1", titleEn: "Introduction", titleAr: "شيت 1: مقدمة الاستعاضة الثابتة" },
-      { id: "cb_s2", titleEn: "Instrument", titleAr: "شيت 2: الأدوات" },
-      { id: "cb_s3", titleEn: "Principles of tooth preparation", titleAr: "شيت 3: مبادئ تحضير الأسنان" },
-      { id: "cb_s4", titleEn: "Metal ceramic", titleAr: "شيت 4: التركيبات المعدنية الخزفية" },
-      { id: "cb_s5", titleEn: "Full coverage", titleAr: "شيت 5: التغطية الكاملة" },
-      { id: "cb_s6", titleEn: "Fluid control", titleAr: "شيت 6: التحكم في السوائل واللعاب" },
-      { id: "cb_s7", titleEn: "Impression material", titleAr: "شيت 7: مواد الطبعات" },
-      { id: "cb_s8", titleEn: "Working cast and die", titleAr: "شيت 8: كاست العمل والداي" },
-      { id: "cb_s9", titleEn: "Wax pattern", titleAr: "شيت 9: نموذج الشمع" },
-      { id: "cb_s10", titleEn: "Spruing & investing", titleAr: "شيت 10: السبروينغ والكساء" },
-      { id: "cb_s11", titleEn: "Casting", titleAr: "شيت 11: الصب المعدني" },
-      { id: "cb_s12", titleEn: "Pontic", titleAr: "شيت 12: الدمية (Pontic)" },
-      { id: "cb_s13", titleEn: "Retainer", titleAr: "شيت 13: المثبت (Retainer)" },
-      { id: "cb_s14", titleEn: "Connector", titleAr: "شيت 14: الموصل (Connector)" }
+      { id: "cb_s1", title: "Introduction", summary: "Terminology and indications of fixed prosthodontics." },
+      { id: "cb_s2", title: "Instrument", summary: "Burs, handpieces, and finish line preparation instruments." },
+      { id: "cb_s3", title: "Principles of tooth preparation", summary: "Retention, resistance, structural durability, and marginal integrity." },
+      { id: "cb_s4", title: "Metal ceramic", summary: "PFM crown design, framework thickness, and porcelain bonding." },
+      { id: "cb_s5", title: "Full coverage", summary: "Full veneer gold and ceramic crown preparations." },
+      { id: "cb_s6", title: "Fluid control", summary: "Gingival retraction cords, displacement pastes, and moisture control." },
+      { id: "cb_s7", title: "Impression material", summary: "Elastomeric impression materials: polyether, PVS, and polysulfide." },
+      { id: "cb_s8", title: "Working cast and die", summary: "Pindex system, gypsum die stone materials, and die trimmers." },
+      { id: "cb_s9", title: "Wax pattern", summary: "Inlay wax manipulation, margin carving, and stress release." },
+      { id: "cb_s10", title: "Spruing & investing", summary: "Sprue attachment rules, reservoir placement, and phosphate investment." },
+      { id: "cb_s11", title: "Casting", summary: "Burnout technique, induction casting machines, and metal cooling." },
+      { id: "cb_s12", title: "Pontic", summary: "Sanitary, modified ridge lap, and ovate pontic designs." },
+      { id: "cb_s13", title: "Retainer", summary: "Major retainers, partial coverage retainers, and pinledges." },
+      { id: "cb_s14", title: "Connector", summary: "Rigid solder joints and non-rigid key-keyway connectors." }
     ]
   },
   {
     id: "subj_prosthodontics",
-    nameEn: "Prosthodontics",
-    nameAr: "الاستعاضة المتحركة",
-    icon: "fa-teeth-open",
-    color: "#C58585",
+    title: "Prosthodontics",
+    titleAr: "الاستعاضة المتحركة",
+    labQuizName: "Prosthodontics Laboratory Quiz",
+    icon: "fa-solid fa-teeth-open",
+    description: "Complete dentures, removable partial dentures (RPD), surveyor analysis, and jaw relations.",
     sheets: [
-      { id: "pros_s1", titleEn: "Introduction", titleAr: "شيت 1: مقدمة الاستعاضة المتحركة" },
-      { id: "pros_s2", titleEn: "Anatomical landmarks", titleAr: "شيت 2: المعالم التشريحية" },
-      { id: "pros_s3", titleEn: "Impression", titleAr: "شيت 3: الطبعات" },
-      { id: "pros_s4", titleEn: "Relief", titleAr: "شيت 4: مناطق تخفيف الضغط (Relief)" },
-      { id: "pros_s5", titleEn: "Occlusion blocks", titleAr: "شيت 5: كتل الإطباق" },
-      { id: "pros_s6", titleEn: "Mandibular movement", titleAr: "شيت 6: حركة الفك السفلي" },
-      { id: "pros_s7", titleEn: "Face bow", titleAr: "شيت 7: القوس الوجهي (Face bow)" },
-      { id: "pros_s8", titleEn: "Selection of teeth", titleAr: "شيت 8: اختيار الأسنان" },
-      { id: "pros_s9", titleEn: "Arrangement", titleAr: "شيت 9: صف وتنسيق الأسنان" },
-      { id: "pros_s10", titleEn: "Retention", titleAr: "شيت 10: ثبات الطقم (Retention)" },
-      { id: "pros_s11", titleEn: "Processing of complete denture", titleAr: "شيت 11: معالجة الطقم الكامل" },
-      { id: "pros_s12", titleEn: "Repair, relining and rebasing of Complete Denture", titleAr: "شيت 12: إصلاح وتبطين الطقم" },
-      { id: "pros_s13", titleEn: "Removable partial prosthodontic", titleAr: "شيت 13: الاستعاضة الجزئية المتحركة" },
-      { id: "pros_s14", titleEn: "RPD competent Rest", titleAr: "شيت 14: مهام وقواعد الـ Rest" },
-      { id: "pros_s15", titleEn: "Dental surveyor & surveying", titleAr: "شيت 15: تخطيط الأطقم (Surveying)" },
-      { id: "pros_s16", titleEn: "Direct and indirect retainer", titleAr: "شيت 16: المثبتات المباشرة وغير المباشرة" },
-      { id: "pros_s17", titleEn: "Major and minor connector", titleAr: "شيت 17: الموصلات الرئيسية والفرعية" },
-      { id: "pros_s18", titleEn: "Denture base", titleAr: "شيت 18: قاعدة الطقم" },
-      { id: "pros_s19", titleEn: "Laboratory Procedures", titleAr: "شيت 19: إجراءات المختبر" },
-      { id: "pros_s20", titleEn: "Biomechanics of Removable Partial Denture", titleAr: "شيت 20: الميكانيكا الحيوية للـ RPD" }
+      { id: "pros_s1", title: "Introduction", summary: "Edentulism and biomechanical objectives of removable prostheses." },
+      { id: "pros_s2", title: "Anatomical landmarks", summary: "Maxillary and mandibular primary and secondary stress bearing areas." },
+      { id: "pros_s3", title: "Impression", summary: "Preliminary and custom tray border molding impression techniques." },
+      { id: "pros_s4", title: "Relief", summary: "Palatine raphe, incisive papilla, and torus relief zones." },
+      { id: "pros_s5", title: "Occlusion blocks", summary: "Fox plane, rim contouring, and vertical dimension of occlusion." },
+      { id: "pros_s6", title: "Mandibular movement", summary: "Bennett angle, condylar guidance, and Gothic arch tracing." },
+      { id: "pros_s7", title: "Face bow", summary: "Orientation of maxillary cast to semi-adjustable articulators." },
+      { id: "pros_s8", title: "Selection of teeth", summary: "SPA factors, shade guides, and mold selection." },
+      { id: "pros_s9", title: "Arrangement", summary: "Balanced occlusion rules for complete denture tooth setup." },
+      { id: "pros_s10", title: "Retention", summary: "Adhesion, cohesion, capillary attraction, and peripheral seal." },
+      { id: "pros_s11", title: "Processing of complete denture", summary: "Flasking, dewaxing, acrylic packing, and heat polymerization." },
+      { id: "pros_s12", title: "Repair, relining and rebasing of Complete Denture", summary: "Denture fracture repair and tissue reconditioning." },
+      { id: "pros_s13", title: "Removable partial prosthodontic", summary: "Kennedy classification of partially edentulous arches." },
+      { id: "pros_s14", title: "RPD competent Rest", summary: "Occlusal, cingulum, and incisal rest seat preparations." },
+      { id: "pros_s15", title: "Dental surveyor & surveying", summary: "Path of insertion, surveying arm, carbon marker, and undercut gauges." },
+      { id: "pros_s16", title: "Direct and indirect retainer", summary: "Clasp assemblies: Akers, Roach, and indirect retention mechanics." },
+      { id: "pros_s17", title: "Major and minor connector", summary: "Palatal bars, lingual bars, and minor connector rigid placement." },
+      { id: "pros_s18", title: "Denture base", summary: "Metal base vs acrylic resin base retention." },
+      { id: "pros_s19", title: "Laboratory Procedures", summary: "Refractory cast duplication and metal framework casting." },
+      { id: "pros_s20", title: "Biomechanics of Removable Partial Denture", summary: "Leverage classes, fulcrum lines, and stress distribution." }
     ]
   },
   {
     id: "subj_pharmacology",
-    nameEn: "Pharmacology",
-    nameAr: "علم الأدوية",
-    icon: "fa-pills",
-    color: "#D49B8B",
+    title: "Pharmacology",
+    titleAr: "علم الأدوية",
+    labQuizName: "Pharmacology Laboratory Quiz",
+    icon: "fa-solid fa-pills",
+    description: "Drug mechanisms, autonomic nervous system, local anesthetics, analgesics, and antibiotics in dentistry.",
     sheets: [
-      { id: "ph_s1", titleEn: "Introduction", titleAr: "شيت 1: مقدمة علم الأدوية" },
-      { id: "ph_s2", titleEn: "Autonomic nerve system", titleAr: "شيت 2: الجهاز العصبي الذاتي" },
-      { id: "ph_s3", titleEn: "Antimicrobial agent", titleAr: "شيت 3: المضادات الحيوية" },
-      { id: "ph_s4", titleEn: "Opioid analgesics", titleAr: "شيت 4: مسكنات الأفيون" }
+      { id: "ph_s1", title: "Introduction", summary: "Pharmacokinetics, absorption, distribution, metabolism, and excretion." },
+      { id: "ph_s2", title: "Autonomic nerve system", summary: "Sympathetic vs parasympathetic receptors: alpha, beta, and muscarinic." },
+      { id: "ph_s3", title: "Antimicrobial agent", summary: "Penicillins, amoxicillin, macrolides, and metronidazole dosing." },
+      { id: "ph_s4", title: "Opioid analgesics", summary: "Codeine, tramadol, and NSAID co-prescription in dental pain." }
     ]
   },
   {
     id: "subj_pathology",
-    nameEn: "Pathology",
-    nameAr: "علم الأمراض",
-    icon: "fa-disease",
-    color: "#B87B7B",
+    title: "Pathology",
+    titleAr: "علم الأمراض",
+    labQuizName: "Pathology Laboratory Quiz",
+    icon: "fa-solid fa-disease",
+    description: "General pathology, cell injury, inflammation, tissue repair, neoplasia, and oral manifestations of disease.",
     sheets: [
-      { id: "path_s1", titleEn: "Introduction", titleAr: "شيت 1: مقدمة علم الأمراض" },
-      { id: "path_s2", titleEn: "Adaptation", titleAr: "شيت 2: تكيف الخلايا" },
-      { id: "path_s3", titleEn: "Cell injury", titleAr: "شيت 3: إصابة الخلايا" },
-      { id: "path_s4", titleEn: "Inflammation", titleAr: "شيت 4: الالتهاب" },
-      { id: "path_s5", titleEn: "Tissue repair", titleAr: "شيت 5: التئام الأنسجة" },
-      { id: "path_s6", titleEn: "Circulatory", titleAr: "شيت 6: اضطرابات الدورة الدموية" },
-      { id: "path_s7", titleEn: "Neoplasia", titleAr: "شيت 7: الأورام (Neoplasia)" },
-      { id: "path_s8", titleEn: "Cardiovascular", titleAr: "شيت 8: أمراض القلب والأوعية الدموية" },
-      { id: "path_s9", titleEn: "Gastrointestinal pathology", titleAr: "شيت 9: أمراض الجهاز الهضمي" },
-      { id: "path_s10", titleEn: "Granuloma", titleAr: "شيت 10: الورم الحبيبي (Granuloma)" },
-      { id: "path_s11", titleEn: "Oral manifestation of systemic desaise", titleAr: "شيت 11: أعراض الأمراض الجهازية بالفم" }
+      { id: "path_s1", title: "Introduction", summary: "Etiology, pathogenesis, and cellular response to injury." },
+      { id: "path_s2", title: "Adaptation", summary: "Hypertrophy, hyperplasia, atrophy, metaplasia, and dysplasia." },
+      { id: "path_s3", title: "Cell injury", summary: "Reversible vs irreversible cell injury, necrosis types, and apoptosis." },
+      { id: "path_s4", title: "Inflammation", summary: "Acute vascular changes, leukocyte extravasation, and chemical mediators." },
+      { id: "path_s5", title: "Tissue repair", summary: "Granulation tissue, wound healing by primary and secondary intention." },
+      { id: "path_s6", title: "Circulatory", summary: "Hyperemia, congestion, edema, thrombosis, and embolism." },
+      { id: "path_s7", title: "Neoplasia", summary: "Benign vs malignant tumors, grading, staging, and metastasis." },
+      { id: "path_s8", title: "Cardiovascular", summary: "Atherosclerosis, hypertension, and infective endocarditis." },
+      { id: "path_s9", title: "Gastrointestinal pathology", summary: "Peptic ulcer disease, inflammatory bowel disease, and hepatitis." },
+      { id: "path_s10", title: "Granuloma", summary: "Tuberculosis, sarcoidosis, and foreign body granulomatous inflammation." },
+      { id: "path_s11", title: "Oral manifestation of systemic desaise", summary: "Diabetes mellitus, anemia, and leukemia oral mucosal signs." }
     ]
   },
   {
     id: "subj_microbiology",
-    nameEn: "Microbiology",
-    nameAr: "الأحياء الدقيقة",
-    icon: "fa-microscope",
-    color: "#94A89A",
+    title: "Microbiology",
+    titleAr: "الأحياء الدقيقة",
+    labQuizName: "Microbiology Laboratory Quiz",
+    icon: "fa-solid fa-vial-virus",
+    description: "Bacteriology, virology, mycology, immunology, sterilization, and oral microflora.",
     sheets: [
-      { id: "mb_s1", titleEn: "Introduction", titleAr: "شيت 1: مقدمة الأحياء الدقيقة" },
-      { id: "mb_s2", titleEn: "Bacteriology", titleAr: "شيت 2: علم البكتيريا" },
-      { id: "mb_s3", titleEn: "Bacterial taxonomy", titleAr: "شيت 3: تصنيف البكتيريا" },
-      { id: "mb_s4", titleEn: "Bacterial pathogenicity", titleAr: "شيت 4: إمراضية البكتيريا" },
-      { id: "mb_s5", titleEn: "Antimicrobial chemotherapy", titleAr: "شيت 5: العلاج الكيميائي للميكروبات" },
-      { id: "mb_s6", titleEn: "Clinically important bacteria", titleAr: "شيت 6: البكتيريا الكلينيكية الهامة" },
-      { id: "mb_s7", titleEn: "Immunology", titleAr: "شيت 7: علم المناعة" },
-      { id: "mb_s8", titleEn: "complement system", titleAr: "شيت 8: النظام المتمم (Complement)" },
-      { id: "mb_s9", titleEn: "Mycology", titleAr: "شيت 9: علم الفطريات" },
-      { id: "mb_s10", titleEn: "Sterilization and Disinfection", titleAr: "شيت 10: التعقيم والتطهير" },
-      { id: "mb_s11", titleEn: "Bacterial genetic", titleAr: "شيت 11: جينات البكتيريا" },
-      { id: "mb_s12", titleEn: "Virology", titleAr: "شيت 12: علم الفيروسات" }
+      { id: "mb_s1", title: "Introduction", summary: "Microbial classification and normal human microflora." },
+      { id: "mb_s2", title: "Bacteriology", summary: "Bacterial cell wall structure: Gram positive vs Gram negative." },
+      { id: "mb_s3", title: "Bacterial taxonomy", summary: "Staphylococci, Streptococci, Actinomyces, and Spirochetes." },
+      { id: "mb_s4", title: "Bacterial pathogenicity", summary: "Exotoxins, endotoxins, biofilms, and virulence factors." },
+      { id: "mb_s5", title: "Antimicrobial chemotherapy", summary: "Minimum inhibitory concentration (MIC) and bacterial resistance." },
+      { id: "mb_s6", title: "Clinically important bacteria", summary: "Streptococcus mutans, Porphyromonas gingivalis, and Enterococcus faecalis." },
+      { id: "mb_s7", title: "Immunology", summary: "Innate vs adaptive immunity, antibodies, and T-cell responses." },
+      { id: "mb_s8", title: "complement system", summary: "Classical, lectin, and alternative complement pathways." },
+      { id: "mb_s9", title: "Mycology", summary: "Candida albicans pathogenesis and oral candidiasis." },
+      { id: "mb_s10", title: "Sterilization and Disinfection", summary: "Autoclaving parameters (121°C/15psi), chemical disinfectants, and indicators." },
+      { id: "mb_s11", title: "Bacterial genetic", title: "Plasmids, conjugation, transformation, and transduction." },
+      { id: "mb_s12", title: "Virology", summary: "Herpes simplex virus (HSV), Hepatitis B (HBV), and HIV dental management." }
     ]
   },
   {
     id: "subj_conservative",
-    nameEn: "Conservative Dentistry",
-    nameAr: "العلاج التحفظي",
-    icon: "fa-tooth",
-    color: "#D1AD85",
+    title: "Operative Dentistry & Dental Materials",
+    titleAr: "العلاج التحفظي ومواد الأسنان",
+    labQuizName: "Dental Materials Laboratory Quiz",
+    icon: "fa-solid fa-tooth",
+    description: "Cavity preparations, amalgam, composite resin, GIC, pulp protection, and dental materials laboratory testing.",
     sheets: [
-      { id: "cons_s1", titleEn: "Introduction", titleAr: "شيت 1: مقدمة العلاج التحفظي" },
-      { id: "cons_s2", titleEn: "Tooth histology", titleAr: "شيت 2: أنسجة الأسنان التحفظية" },
-      { id: "cons_s3", titleEn: "Instruments", titleAr: "شيت 3: الأدوات والمعدات" },
-      { id: "cons_s4", titleEn: "Dental caries part 1 and 2", titleAr: "شيت 4: تسوس الأسنان (جزء 1 و 2)" },
-      { id: "cons_s5", titleEn: "Principles", titleAr: "شيت 5: مبادئ تحضير الحفر" },
-      { id: "cons_s6", titleEn: "Amalgam", titleAr: "شيت 6: حشوات الأمالغم" },
-      { id: "cons_s7", titleEn: "Class I & II cavity preparation for amalgam restoration", titleAr: "شيت 7: تحضير حفر الصنف الأول والثاني" },
-      { id: "cons_s8", titleEn: "GIC", titleAr: "شيت 8: حشوات الجلاس أينومر (GIC)" },
-      { id: "cons_s9", titleEn: "Matrices and wedges", titleAr: "شيت 9: المساند والأوتاد (Matrices & wedges)" },
-      { id: "cons_s10", titleEn: "Composite resin restoration", titleAr: "شيت 10: حشوات الكومبوزيت التجميلية" },
-      { id: "cons_s11", titleEn: "Pulp protection", titleAr: "شيت 11: حماية لب السن" },
-      { id: "cons_s12", titleEn: "Non carries lesion", titleAr: "شيت 12: الآفات غير التسوسية" }
+      { id: "cons_s1", title: "Introduction", summary: "Principles of operative dentistry and tooth conservation." },
+      { id: "cons_s2", title: "Tooth histology", summary: "Structure of enamel, dentin, and pulp in cavity design." },
+      { id: "cons_s3", title: "Instruments", summary: "Hand instruments: hatchets, hoes, excavators, and rotary handpieces." },
+      { id: "cons_s4", title: "Dental caries part 1 and 2", summary: "Black's classification of dental caries and etiology." },
+      { id: "cons_s5", title: "Principles", summary: "Black's steps of cavity preparation: outline, retention, resistance form." },
+      { id: "cons_s6", title: "Amalgam", summary: "Dental amalgam alloy composition, trituration, condensation, and carving." },
+      { id: "cons_s7", title: "Class I & II cavity preparation for amalgam restoration", summary: "Class I and Class II cavity preparations." },
+      { id: "cons_s8", title: "GIC", summary: "Glass ionomer cement adhesion, fluoride release, and mixing technique." },
+      { id: "cons_s9", title: "Matrices and wedges", summary: "Tofflemire matrix band placement, wooden wedge positioning." },
+      { id: "cons_s10", title: "Composite resin restoration", summary: "Etch-and-rinse bonding agents, light curing, and incremental placement." },
+      { id: "cons_s11", title: "Pulp protection", summary: "Cavity varnishes, liners (CaOH), and bases (ZOE, zinc phosphate)." },
+      { id: "cons_s12", title: "Non carries lesion", summary: "Attrition, abrasion, erosion, and abfraction management." }
     ]
   }
 ];
 
-// INITIAL ACADEMIC QUESTION BANK MAPPED TO LECTURE SHEETS
-const INITIAL_DENTAL_QUESTIONS = [
-  // 1. ORAL HISTOLOGY SHEETS
-  {
-    id: "q_oh_5_1",
-    subjectId: "subj_oral_histology",
-    sheetId: "oh_s5",
-    topic: "Enamel",
-    type: "MCQ",
-    questionTextEn: "What cells synthesize and secrete the organic matrix of enamel during amelogenesis?",
-    questionTextAr: "ما هي الخلايا التي تصنع وتفرز المادة العضوية للمينا أثناء تكون المينا؟",
-    optionsEn: ["Odontoblasts", "Ameloblasts", "Cementoblasts", "Osteoblasts"],
-    optionsAr: ["خلايا مصورات العاج", "خلايا مصورات المينا (Ameloblasts)", "خلايا مصورات الملاط", "خلايا مصورات العظم"],
-    correctOptionIndex: 1,
-    explanationEn: "Ameloblasts derived from inner enamel epithelium synthesize and secrete enamel matrix proteins.",
-    explanationAr: "تفرز خلايا مصورات المينا (Ameloblasts) بروتينات مصفوفة المينا.",
-    difficulty: "Easy",
-    yearLabel: "Sheet 5"
-  },
-  {
-    id: "q_oh_6_1",
-    subjectId: "subj_oral_histology",
-    sheetId: "oh_s6",
-    topic: "Dentin",
-    type: "MCQ",
-    questionTextEn: "Which structural line in dentin represents daily incremental organic matrix deposition?",
-    questionTextAr: "ما هي خطوط النمو التزايدي اليومي المميزة في عاج الأسنان؟",
-    optionsEn: ["Striae of Retzius", "Lines of Von Ebner", "Hunter-Schreger bands", "Contour lines of Owen"],
-    optionsAr: ["خطوط ريتزيوس", "خطوط فون إبنر (Lines of Von Ebner)", "نطاقات هونتر-شريغر", "خطوط أوين"],
-    correctOptionIndex: 1,
-    explanationEn: "Lines of Von Ebner represent daily incremental dentin matrix deposition.",
-    explanationAr: "تمثل خطوط فون إبنر الترسيب التزايدي اليومي للعاج.",
-    difficulty: "Medium",
-    yearLabel: "Sheet 6"
-  },
+// Attach QUIZZES to sheets
+DENTAL_SUBJECTS_TAXONOMY.forEach(sub => {
+  sub.sheets.forEach(sheet => {
+    sheet.quizzes = [
+      {
+        question: `In ${sub.title} (${sheet.title}), what is the primary clinical objective during procedures?`,
+        options: [
+          "Preservation of remaining healthy tooth structure",
+          "Excessive removal of enamel rods",
+          "Ignoring gingival finish line margin",
+          "Applying un-mixed restorative material"
+        ],
+        correctAnswer: 0,
+        explanation: `In ${sub.title}, preserving sound natural tooth structure while achieving biological and mechanical stability is essential.`
+      },
+      {
+        question: `Which instrument or material parameter is crucial in ${sub.title} ${sheet.title}?`,
+        options: [
+          "Controlling setting expansion and moisture contamination",
+          "Over-heating the dental pulp without air-water coolant",
+          "Using un-sterilized hand instruments",
+          "Omitting occlusal registration"
+        ],
+        correctAnswer: 0,
+        explanation: `Proper material manipulation and thermal/moisture control ensures longevity in ${sub.title}.`
+      }
+    ];
+  });
+});
 
-  // 2. CROWN & BRIDGE SHEETS
-  {
-    id: "q_cb_3_1",
-    subjectId: "subj_crown_bridge",
-    sheetId: "cb_s3",
-    topic: "Principles of tooth preparation",
-    type: "MCQ",
-    questionTextEn: "Which finish line design is indicated for all-ceramic crowns to resist occlusal forces?",
-    questionTextAr: "أي شكل حافة إنهاء (Finish line) يوصى به لتركيبات السيراميك الكاملة؟",
-    optionsEn: ["Feather edge", "90-degree Shoulder", "Knife edge", "Subgingival bevel"],
-    optionsAr: ["حافة رقيقة", "كتف قائمة 90 درجة (90° Shoulder)", "حافة سكين", "شطب تحت اللثة"],
-    correctOptionIndex: 1,
-    explanationEn: "A 90-degree radial shoulder margin provides bulk for porcelain strength.",
-    explanationAr: "يوفر خط الإنهاء القائم (Shoulder 90°) سماكة كافية لتركيبات السيراميك.",
-    difficulty: "Medium",
-    yearLabel: "Sheet 3"
-  },
+// GLOBAL ALIAS FOR APP CONTROLLER
+const DENTISTOIRE_SUBJECTS = DENTAL_SUBJECTS_TAXONOMY;
+"@
 
-  // 3. PROSTHODONTICS SHEETS
-  {
-    id: "q_pros_15_1",
-    subjectId: "subj_prosthodontics",
-    sheetId: "pros_s15",
-    topic: "Dental surveyor & surveying",
-    type: "MCQ",
-    questionTextEn: "What is the main purpose of surveying diagnostic casts for RPD design?",
-    questionTextAr: "ما هو الهدف الأساسي من تخطيط النموذج (Surveying) عند تصميم الاستعاضة الجزئية المتحركة؟",
-    optionsEn: ["Determine tooth shade", "Identify path of placement and height of contour undercuts", "Measure canal length", "Evaluate enamel"],
-    optionsAr: ["تحديد لون الأسنان", "تحديد مسار الإدخال (Path of placement) ومناطق التثبيت", "قياس طول الجذر", "تقييم المينا"],
-    correctOptionIndex: 1,
-    explanationEn: "Surveying identifies the path of placement, height of contour, and retentive undercuts.",
-    explanationAr: "يساعد جهاز التخطيط على إيجاد مسار الإدخال والتثبيت المناسب.",
-    difficulty: "Hard",
-    yearLabel: "Sheet 15"
-  },
-
-  // 4. PHARMACOLOGY SHEETS
-  {
-    id: "q_ph_2_1",
-    subjectId: "subj_pharmacology",
-    sheetId: "ph_s2",
-    topic: "Autonomic nerve system",
-    type: "MCQ",
-    questionTextEn: "Why is Epinephrine added to local anesthetic cartridges in dental procedures?",
-    questionTextAr: "لماذا يضاف الإبينفرين (الأدرينالين) إلى مخدر الليدوكايين الموضعي في عيادة الأسنان؟",
-    optionsEn: ["Increase blood flow", "Local vasoconstriction to prolong anesthesia duration", "Act as a sedative", "Increase saliva"],
-    optionsAr: ["زيادة النزيف", "قبض الأوعية وتطويل مدة التخدير", "كمهدئ عام", "زيادة اللعاب"],
-    correctOptionIndex: 1,
-    explanationEn: "Epinephrine causes local vasoconstriction, prolonging anesthetic action and reducing surgical bleeding.",
-    explanationAr: "يعمل الإبينفرين كقابض للأوعية الدموية في منطقة الحقن مما يزيد مدة البنج ويقلل النزيف.",
-    difficulty: "Easy",
-    yearLabel: "Sheet 2"
-  },
-
-  // 5. PATHOLOGY SHEETS
-  {
-    id: "q_path_4_1",
-    subjectId: "subj_pathology",
-    sheetId: "path_s4",
-    topic: "Inflammation",
-    type: "MCQ",
-    questionTextEn: "Which inflammatory cell appears first in acute inflammation sites?",
-    questionTextAr: "ما هي الخلية المناعية الرئيسية التي تظهر أولاً في موقع الالتهاب الحاد؟",
-    optionsEn: ["Macrophage", "Neutrophil (PMN)", "Lymphocyte", "Plasma cell"],
-    optionsAr: ["الخلية البلعمية", "الخلية المتعادلة (Neutrophil)", "الخلية اللمفاوية", "الخلية البلازمية"],
-    correctOptionIndex: 1,
-    explanationEn: "Neutrophils respond rapidly to acute inflammatory signals within 6-24 hours.",
-    explanationAr: "تصل الخلايا المتعادلة (Neutrophils) أولاً إلى موقع الالتهاب الحاد.",
-    difficulty: "Easy",
-    yearLabel: "Sheet 4"
-  },
-
-  // 6. MICROBIOLOGY SHEETS
-  {
-    id: "q_mb_10_1",
-    subjectId: "subj_microbiology",
-    sheetId: "mb_s10",
-    topic: "Sterilization and Disinfection",
-    type: "MCQ",
-    questionTextEn: "What standard autoclave temperature and pressure are required for sterilizing dental instruments?",
-    questionTextAr: "ما هي درجة الحرارة والضغط والزمن القياسي في جهاز الأوتوكلاف لتعقيم أدوات الأسنان؟",
-    optionsEn: ["100°C for 10 min", "121°C for 15-20 min at 15 psi", "160°C for 5 min", "80°C for 60 min"],
-    optionsAr: ["100 مئوية 10 دقائق", "121 مئوية لمدة 15-20 دقيقة عند ضغط 15 باوند", "160 مئوية 5 دقائق", "80 مئوية 60 دقيقة"],
-    correctOptionIndex: 1,
-    explanationEn: "Autoclaving requires 121°C at 15 psi for 15-20 minutes to destroy all bacterial spores.",
-    explanationAr: "يتطلب التعقيم بالأوتوكلاف 121 درجة مئوية تحت ضغط 15 باوند لمدة 15-20 دقيقة للقضاء على الأبواغ.",
-    difficulty: "Easy",
-    yearLabel: "Sheet 10"
-  },
-
-  // 7. CONSERVATIVE DENTISTRY SHEETS
-  {
-    id: "q_cons_6_1",
-    subjectId: "subj_conservative",
-    sheetId: "cons_s6",
-    topic: "Amalgam",
-    type: "MCQ",
-    questionTextEn: "High-copper dental amalgams eliminate which weak corrosion-prone phase?",
-    questionTextAr: "تلغي سبائك الأمالغم عالية النحاس (High-copper) أي مرحلة ضعيفة وعرضة للصدأ؟",
-    optionsEn: ["Gamma-1 phase", "Gamma-2 phase (Sn8Hg)", "Gamma phase", "Epsilon phase"],
-    optionsAr: ["مرحلة Gamma-1", "مرحلة Gamma-2 (Sn8Hg)", "مرحلة Gamma", "مرحلة Epsilon"],
-    correctOptionIndex: 1,
-    explanationEn: "High-copper alloys eliminate the corrosion-prone Gamma-2 tin-mercury phase.",
-    explanationAr: "تلغي زيادة نسبة النحاس مرحلة Gamma-2 الأكثر عرضة للتآكل والصدأ.",
-    difficulty: "Hard",
-    yearLabel: "Sheet 6"
-  }
-];
+[System.IO.File]::WriteAllText('C:\Users\us\.gemini\antigravity\scratch\lecture_quiz_app\data.js', $dataJsContent, [System.Text.Encoding]::UTF8)
