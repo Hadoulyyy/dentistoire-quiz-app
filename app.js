@@ -207,6 +207,7 @@ class ApplicationController {
       if (matchBtn) matchBtn.classList.add("active");
     }
 
+    if (tabId === "subjects-tab") this.renderAllSubjectsInLibrary();
     if (tabId === "admin-tab") this.renderAdminUsersTable();
     if (tabId === "saved-tab") this.renderSavedList();
     if (tabId === "history-tab") this.renderHistoryLog();
@@ -275,6 +276,53 @@ class ApplicationController {
     });
   }
 
+  renderAllSubjectsInLibrary() {
+    const container = document.getElementById("subject-explorer-content");
+    const titleEl = document.getElementById("subject-explorer-title");
+    if (!container || !titleEl) return;
+
+    titleEl.textContent = "Subjects Library & All 88 Lecture Sheets";
+
+    const subjects = this.getSubjects();
+
+    container.innerHTML = `
+      <div style="display: flex; flex-direction: column; gap: 2rem;">
+        ${subjects.map(sub => `
+          <div style="background: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: 20px; padding: 1.8rem; border-top: 4px solid ${sub.color || '#c67a32'};">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+              <div style="display: flex; align-items: center; gap: 0.8rem;">
+                <i class="${sub.icon}" style="font-size: 1.8rem; color: ${sub.color || 'var(--accent-primary)'};"></i>
+                <div>
+                  <h3 style="font-family: 'Cormorant Garamond', serif; font-size: 1.6rem; color: var(--text-main);">${sub.title}</h3>
+                  <div style="font-size: 0.82rem; color: var(--text-muted); font-weight: 700;">${sub.sheets.length} Lecture Sheets Available</div>
+                </div>
+              </div>
+              <button class="btn-primary" onclick="window.app.startSubjectLabQuiz('${sub.id}')" style="padding: 0.5rem 1.2rem; font-size: 0.85rem;">
+                <i class="fa-solid fa-flask"></i> Take ${sub.title} Lab Quiz
+              </button>
+            </div>
+
+            <p style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: 1.2rem; line-height: 1.5;">${sub.description}</p>
+
+            <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1rem;">
+              ${sub.sheets.map(sheet => `
+                <div style="background: var(--bg-primary); border: 1px solid var(--border-color); border-radius: 12px; padding: 1rem; display: flex; flex-direction: column; justify-content: space-between;">
+                  <div>
+                    <strong style="color: var(--text-main); font-size: 0.95rem;">${sheet.title}</strong>
+                    <p style="font-size: 0.8rem; color: var(--text-muted); margin: 0.4rem 0 0.8rem; line-height: 1.4;">${sheet.summary}</p>
+                  </div>
+                  <button class="btn-secondary" onclick="window.app.startSingleSheetQuiz('${sub.id}', '${sheet.id}')" style="padding: 0.4rem 0.8rem; font-size: 0.8rem; background: var(--bg-secondary); cursor: pointer;">
+                    <i class="fa-solid fa-play"></i> Sheet Lab Quiz
+                  </button>
+                </div>
+              `).join('')}
+            </div>
+          </div>
+        `).join('')}
+      </div>
+    `;
+  }
+
   openSubjectExplorer(subjectId) {
     const sub = this.getSubjects().find(s => s.id === subjectId);
     if (!sub) return;
@@ -287,6 +335,9 @@ class ApplicationController {
 
     container.innerHTML = `
       <div style="margin-bottom: 2rem;">
+        <button class="btn-secondary" onclick="window.app.renderAllSubjectsInLibrary()" style="margin-bottom: 1.5rem;">
+          <i class="fa-solid fa-arrow-left"></i> Back to All Subjects
+        </button>
         <p style="color: var(--text-muted); margin-bottom: 1.5rem; font-size: 1rem; line-height: 1.6;">${sub.description}</p>
         <div style="display: flex; flex-direction: column; gap: 1.2rem;">
           ${sub.sheets.map(sheet => `
@@ -666,4 +717,4 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 "@
 
-[System.IO.File]::WriteAllText('C:\Users\us\.gemini\antigravity\scratch\lecture_quiz_app\app.js', $appJsDelegation, [System.Text.Encoding]::UTF8)
+[System.IO.File]::WriteAllText('C:\Users\us\.gemini\antigravity\scratch\lecture_quiz_app\app.js', $appJsFullLibrary, [System.Text.Encoding]::UTF8)
