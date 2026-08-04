@@ -1,157 +1,61 @@
-/* ==========================================================================
-   DENTISTOIRE - PRODUCTION MULTI-THEME ENGINE & AESTHETIC POLISH
-   Theme 1: Cozy Cream & Bunny (Exact Photo 1 Replica)
-   Theme 2: Terracotta Amber & Sand (Exact Photo 2 Replica)
-   ========================================================================== */
+﻿/* DENTISTOIRE MULTI-THEME ENGINE */
 
-/* THEME 1 (DEFAULT) - COZY CREAM & BLUSH (PHOTO 1) */
+/* THEME 1: COZY CREAM & BUNNY (PHOTO 1) */
 :root, [data-theme="theme-1"] {
   --bg-primary: #f9f0ea;
   --bg-secondary: #ffffff;
-  --bg-glass-card: rgba(255, 255, 255, 0.88);
   --border-color: #eedcd3;
-  --border-hover: #c58585;
-
   --text-main: #3d2626;
   --text-muted: #684b4b;
-  --text-dim: #9c7b7b;
-
   --accent-primary: #c58585;
   --accent-primary-hover: #b06e6e;
-  --accent-gradient: linear-gradient(135deg, #c58585 0%, #b87777 50%, #ab6767 100%);
   --accent-glow: 0 8px 25px rgba(197, 133, 133, 0.25);
-
   --banner-bg: #ffffff;
   --banner-border: #eedcd3;
   --banner-text: #3d2626;
-
-  --success-color: #5b9a7c;
-  --success-bg: rgba(91, 154, 124, 0.12);
-  --danger-color: #d46a6a;
-  --danger-bg: rgba(212, 106, 106, 0.12);
-  --warning-color: #d99b56;
-  --warning-bg: rgba(217, 155, 86, 0.12);
 }
 
-/* THEME 2 - TERRACOTTA AMBER & SAND (EXACT REPLICA OF PHOTO 2) */
+/* THEME 2: TERRACOTTA AMBER & SAND (PHOTO 2) */
 [data-theme="theme-2"] {
   --bg-primary: #d5a372;
   --bg-secondary: #281b11;
-  --bg-glass-card: rgba(40, 27, 17, 0.95);
   --border-color: #523b2b;
-  --border-hover: #c67a32;
-
   --text-main: #1d130a;
   --text-muted: #4e3522;
-  --text-dim: #7a583e;
-
   --accent-primary: #c67a32;
   --accent-primary-hover: #a8611d;
-  --accent-gradient: linear-gradient(135deg, #c67a32 0%, #b06924 100%);
   --accent-glow: 0 8px 25px rgba(198, 122, 50, 0.35);
-
   --banner-bg: #21160d;
   --banner-border: #3d2919;
   --banner-text: #f5e8dd;
-
-  --success-color: #64b591;
-  --success-bg: rgba(100, 181, 145, 0.18);
-  --danger-color: #e57373;
-  --danger-bg: rgba(229, 115, 115, 0.18);
-  --warning-color: #ffb74d;
-  --warning-bg: rgba(255, 183, 77, 0.18);
 }
 
-/* THEME 2 DIAGONAL BACKGROUND BANDS (PHOTO 2) */
 [data-theme="theme-2"] body {
-  background: 
-    linear-gradient(135deg, 
-      #dca877 0%, 
-      #d1955e 25%, 
-      #be7a3b 45%, 
-      #8c4d1d 65%, 
-      #42230e 85%, 
-      #211208 100%
-    );
-  background-attachment: fixed;
-  color: #1d130a;
+  background: linear-gradient(135deg, #dca877 0%, #d1955e 25%, #be7a3b 45%, #8c4d1d 65%, #42230e 85%, #211208 100%) !important;
+  background-attachment: fixed !important;
+  color: #1d130a !important;
 }
 
-[data-theme="theme-2"] .hero-bienvenue {
-  color: #c67a32;
+[data-theme="theme-2"] .hero-bienvenue { color: #c67a32 !important; }
+[data-theme="theme-2"] .hero-dentistoire-title { color: #1d130a !important; font-family: 'Quicksand', sans-serif !important; font-weight: 900 !important; }
+[data-theme="theme-2"] .hero-description { color: #3b281b !important; }
+[data-theme="theme-2"] .btn-discover-services { background: #c67a32 !important; color: #1d130a !important; font-weight: 800 !important; border-radius: 4px !important; }
+[data-theme="theme-2"] .dentistoire-banner-card { background: #21160d !important; border: 1px solid #3d2919 !important; border-radius: 12px !important; }
+[data-theme="theme-2"] .banner-title { color: #c67a32 !important; }
+[data-theme="theme-2"] .banner-text { color: #c4b0a0 !important; }
+[data-theme="theme-2"] .banner-icon { color: #c67a32 !important; }
+
+/* THEME 2 HIDES BUNNY RIGHT COL (BECAUSE PHOTO 2 HAS NO BUNNY) */
+[data-theme="theme-2"] .hero-right-col {
+  display: none !important;
 }
 
-[data-theme="theme-2"] .hero-dentistoire-title {
-  color: #1d130a;
-  font-family: var(--font-sans);
-  font-weight: 900;
-  letter-spacing: 4px;
+[data-theme="theme-2"] .dentistoire-hero-container {
+  grid-template-columns: 1fr !important;
+  max-width: 800px;
 }
 
-[data-theme="theme-2"] .hero-description {
-  color: #3b281b;
-}
-
-[data-theme="theme-2"] .btn-discover-services {
-  background: #c67a32;
-  color: #1d130a;
-  font-weight: 800;
-  border-radius: 4px;
-  box-shadow: 0 6px 20px rgba(198, 122, 50, 0.4);
-}
-
-[data-theme="theme-2"] .dentistoire-banner-card {
-  background: #21160d;
-  border: 1px solid #3d2919;
-  border-radius: 12px;
-}
-
-[data-theme="theme-2"] .banner-title {
-  color: #c67a32;
-}
-
-[data-theme="theme-2"] .banner-text {
-  color: #c4b0a0;
-}
-
-[data-theme="theme-2"] .banner-icon {
-  color: #c67a32;
-}
-
-[data-theme="theme-2"] .hero-bunny-illustration {
-  mix-blend-mode: multiply;
-  filter: contrast(110%) brightness(95%);
-}
-
-/* CORE BASE SYSTEM */
-:root {
-  --radius-sm: 8px;
-  --radius-md: 16px;
-  --radius-lg: 24px;
-  --radius-pill: 50px;
-
-  --shadow-sm: 0 4px 14px rgba(0, 0, 0, 0.04);
-  --shadow-md: 0 10px 30px rgba(0, 0, 0, 0.08);
-  --shadow-lg: 0 20px 45px rgba(0, 0, 0, 0.16);
-
-  --font-serif: 'Cormorant Garamond', 'Playfair Display', Georgia, serif;
-  --font-sans: 'Quicksand', 'Plus Jakarta Sans', -apple-system, sans-serif;
-
-  --transition: all 0.28s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-* {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-  font-family: var(--font-sans);
-}
-
-[dir="rtl"] {
-  direction: rtl;
-  text-align: right;
-  font-family: 'Tajawal', var(--font-sans);
-}
+* { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Quicksand', sans-serif; }
 
 body {
   background-color: var(--bg-primary);
@@ -159,11 +63,9 @@ body {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
-  transition: background 0.4s ease, color 0.4s ease;
-  overflow-x: hidden;
+  transition: background 0.3s ease, color 0.3s ease;
 }
 
-/* HEADER NAVBAR */
 header {
   position: sticky;
   top: 0;
@@ -171,7 +73,6 @@ header {
   background: var(--bg-primary);
   backdrop-filter: blur(12px);
   border-bottom: 1px solid var(--border-color);
-  transition: var(--transition);
 }
 
 .header-container {
@@ -183,15 +84,8 @@ header {
   justify-content: space-between;
 }
 
-.brand {
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
-  cursor: pointer;
-}
-
 .brand-title {
-  font-family: var(--font-serif);
+  font-family: 'Cormorant Garamond', serif;
   font-size: 1.6rem;
   font-weight: 700;
   color: var(--text-main);
@@ -202,38 +96,23 @@ header {
   display: flex;
   align-items: center;
   gap: 1.8rem;
-  background: transparent;
-  padding: 0;
-  border-radius: 0;
-  border: none;
 }
 
 .tab-btn {
   background: transparent;
   border: none;
   color: var(--text-muted);
-  padding: 0.3rem 0;
-  font-family: var(--font-serif);
+  font-family: 'Cormorant Garamond', serif;
   font-size: 1.05rem;
   font-weight: 500;
   cursor: pointer;
-  display: flex;
-  align-items: center;
-  gap: 0.35rem;
-  transition: var(--transition);
-  position: relative;
   border-bottom: 2px solid transparent;
-  white-space: nowrap;
-}
-
-.tab-btn:hover {
-  color: var(--text-main);
+  padding: 0.3rem 0;
 }
 
 .tab-btn.active {
-  background: transparent;
   color: var(--accent-primary);
-  border-bottom: 2px solid var(--accent-primary);
+  border-bottom-color: var(--accent-primary);
 }
 
 .header-actions {
@@ -242,64 +121,6 @@ header {
   gap: 0.8rem;
 }
 
-/* AESTHETIC THEME SWITCHER PILL (SLEEK & ELEGANT) */
-.theme-switcher-pill {
-  display: inline-flex;
-  align-items: center;
-  background: var(--bg-secondary);
-  border: 1px solid var(--border-color);
-  border-radius: var(--radius-pill);
-  padding: 3px;
-  box-shadow: var(--shadow-sm);
-  transition: var(--transition);
-}
-
-.theme-pill-option {
-  background: transparent;
-  border: none;
-  color: var(--text-muted);
-  padding: 0.35rem 0.85rem;
-  border-radius: var(--radius-pill);
-  font-size: 0.8rem;
-  font-weight: 700;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  gap: 0.4rem;
-  transition: var(--transition);
-}
-
-.theme-pill-option.active {
-  background: var(--accent-primary);
-  color: #ffffff;
-  box-shadow: var(--accent-glow);
-}
-
-[data-theme="theme-2"] .theme-pill-option.active {
-  color: #1d130a;
-}
-
-.user-profile-badge, .lang-btn {
-  background: var(--bg-secondary);
-  border: 1px solid var(--border-color);
-  color: var(--text-main);
-  padding: 0.45rem 0.95rem;
-  border-radius: var(--radius-pill);
-  font-size: 0.85rem;
-  font-weight: 700;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  gap: 0.45rem;
-  transition: var(--transition);
-}
-
-.user-profile-badge:hover, .lang-btn:hover {
-  border-color: var(--accent-primary);
-  color: var(--accent-primary);
-}
-
-/* HERO SECTION */
 main {
   max-width: 1200px;
   width: 100%;
@@ -314,60 +135,34 @@ main {
   gap: 3rem;
   align-items: center;
   margin-bottom: 3rem;
-  position: relative;
 }
 
 .hero-left-col {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  z-index: 2;
 }
 
 .hero-bienvenue {
-  font-family: var(--font-serif);
+  font-family: 'Cormorant Garamond', serif;
   font-size: 2.2rem;
   color: var(--accent-primary);
   font-style: italic;
-  margin-bottom: 0.2rem;
-  font-weight: 500;
 }
 
 .hero-dentistoire-title {
-  font-family: var(--font-serif);
+  font-family: 'Cormorant Garamond', serif;
   font-size: 3.8rem;
   font-weight: 600;
-  color: var(--text-main);
   letter-spacing: 3px;
-  line-height: 1;
-  margin-bottom: 0.8rem;
   text-transform: uppercase;
 }
 
-.hero-heart-divider {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-  width: 100%;
-  max-width: 320px;
-  margin-bottom: 1.5rem;
-  color: var(--accent-primary);
-  font-size: 0.85rem;
-}
-
-.hero-heart-divider::before, .hero-heart-divider::after {
-  content: '';
-  height: 1px;
-  flex: 1;
-  background: var(--border-color);
-}
-
 .hero-tagline {
-  font-family: var(--font-serif);
+  font-family: 'Cormorant Garamond', serif;
   font-size: 1.7rem;
   font-weight: 600;
-  color: var(--text-main);
-  margin-bottom: 0.8rem;
+  margin: 0.8rem 0;
 }
 
 .hero-description {
@@ -383,62 +178,37 @@ main {
   color: white;
   border: none;
   padding: 0.85rem 1.9rem;
-  border-radius: var(--radius-pill);
-  font-family: var(--font-serif);
+  border-radius: 50px;
+  font-family: 'Cormorant Garamond', serif;
   font-size: 1rem;
   font-weight: 600;
   letter-spacing: 1px;
   text-transform: uppercase;
   cursor: pointer;
-  display: inline-flex;
-  align-items: center;
-  gap: 0.6rem;
-  transition: var(--transition);
-  box-shadow: var(--accent-glow);
-}
-
-.btn-discover-services:hover {
-  background: var(--accent-primary-hover);
-  transform: translateY(-2px);
 }
 
 .hero-right-col {
   display: flex;
   justify-content: center;
   align-items: center;
-  position: relative;
 }
 
 .hero-bunny-illustration {
   width: 100%;
-  max-width: 520px;
+  max-width: 500px;
   height: auto;
   display: block;
-  z-index: 2;
   mix-blend-mode: multiply;
   filter: contrast(103%) brightness(99%);
-  background: transparent;
-  border: none;
-  box-shadow: none;
-  outline: none;
-  animation: floatHero 6s ease-in-out infinite;
 }
 
-@keyframes floatHero {
-  0%, 100% { transform: translateY(0px); }
-  50% { transform: translateY(-8px); }
-}
-
-/* BOTTOM FEATURE BANNER CARD (4 COLUMNS) */
 .dentistoire-banner-card {
   background: var(--banner-bg);
   border: 1px solid var(--banner-border);
-  border-radius: var(--radius-lg);
+  border-radius: 24px;
   padding: 1.8rem 1.5rem;
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  gap: 0;
-  box-shadow: var(--shadow-sm);
   margin-bottom: 2.5rem;
 }
 
@@ -450,50 +220,10 @@ main {
   border-right: 1px solid var(--border-color);
 }
 
-.banner-col:last-child {
-  border-right: none;
-}
-
-.banner-icon {
-  font-size: 2.2rem;
-  color: var(--accent-primary);
-  flex-shrink: 0;
-  line-height: 1;
-}
-
-.banner-title {
-  font-family: var(--font-serif);
-  font-size: 1.15rem;
-  font-weight: 700;
-  color: var(--text-main);
-  letter-spacing: 1px;
-  margin-bottom: 0.35rem;
-  text-transform: uppercase;
-}
-
-.banner-text {
-  font-size: 0.85rem;
-  color: var(--text-muted);
-  line-height: 1.5;
-}
-
-/* SUBJECT CARDS */
-.section-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 1.8rem;
-}
-
-.section-title {
-  font-family: var(--font-serif);
-  font-size: 1.8rem;
-  font-weight: 700;
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
-  color: var(--text-main);
-}
+.banner-col:last-child { border-right: none; }
+.banner-icon { font-size: 2.2rem; color: var(--accent-primary); }
+.banner-title { font-family: 'Cormorant Garamond', serif; font-size: 1.15rem; font-weight: 700; text-transform: uppercase; margin-bottom: 0.35rem; }
+.banner-text { font-size: 0.85rem; color: var(--text-muted); }
 
 .subject-grid {
   display: grid;
@@ -504,45 +234,11 @@ main {
 .subject-card {
   background: var(--bg-secondary);
   border: 1px solid var(--border-color);
-  border-radius: var(--radius-lg);
+  border-radius: 24px;
   padding: 1.8rem;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  transition: var(--transition);
-  box-shadow: var(--shadow-sm);
-}
-
-.subject-card:hover {
-  border-color: var(--accent-primary);
-  transform: translateY(-4px);
-  box-shadow: var(--shadow-md);
-}
-
-.subject-header {
-  display: flex;
-  align-items: center;
-  gap: 1.1rem;
-  margin-bottom: 1.2rem;
-}
-
-.subject-icon-box {
-  width: 52px;
-  height: 52px;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 1.4rem;
-  color: white;
-  flex-shrink: 0;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-}
-
-/* SEARCH BAR */
-.search-container {
-  margin-bottom: 2.5rem;
-  position: relative;
 }
 
 .search-input {
@@ -550,43 +246,20 @@ main {
   background: var(--bg-secondary);
   border: 1px solid var(--border-color);
   color: var(--text-main);
-  padding: 1.1rem 1.4rem;
-  padding-left: 3.2rem;
-  border-radius: var(--radius-pill);
+  padding: 1.1rem 1.4rem 1.1rem 3.2rem;
+  border-radius: 50px;
   font-size: 1rem;
-  transition: var(--transition);
-  box-shadow: var(--shadow-sm);
+  margin-bottom: 2.5rem;
 }
 
-.search-icon {
-  position: absolute;
-  left: 1.3rem;
-  top: 50%;
-  transform: translateY(-50%);
-  color: var(--accent-primary);
-  font-size: 1.1rem;
-}
-
-/* BUTTONS */
 .btn-primary {
   background: var(--accent-primary);
   color: white;
   border: none;
   padding: 0.8rem 1.6rem;
-  border-radius: var(--radius-pill);
+  border-radius: 50px;
   font-weight: 700;
-  font-size: 0.9rem;
   cursor: pointer;
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5rem;
-  transition: var(--transition);
-  box-shadow: var(--accent-glow);
-}
-
-.btn-primary:hover {
-  background: var(--accent-primary-hover);
-  transform: translateY(-1px);
 }
 
 .btn-secondary {
@@ -594,99 +267,26 @@ main {
   color: var(--text-main);
   border: 1px solid var(--border-color);
   padding: 0.8rem 1.6rem;
-  border-radius: var(--radius-pill);
+  border-radius: 50px;
   font-weight: 700;
-  font-size: 0.9rem;
   cursor: pointer;
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5rem;
-  transition: var(--transition);
 }
 
-.btn-secondary:hover {
-  border-color: var(--accent-primary);
-  color: var(--accent-primary);
-}
-
-/* MODALS & TOASTS */
 .modal-overlay {
   position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  background: rgba(0, 0, 0, 0.45);
-  backdrop-filter: blur(8px);
+  top: 0; left: 0; width: 100vw; height: 100vh;
+  background: rgba(0,0,0,0.5);
+  display: none; align-items: center; justify-content: center;
   z-index: 3000;
-  display: none;
-  align-items: center;
-  justify-content: center;
 }
 
 .modal-card {
   background: var(--bg-secondary);
   border: 1px solid var(--border-color);
-  border-radius: var(--radius-lg);
-  padding: 2.4rem;
-  width: 100%;
-  max-width: 520px;
-  box-shadow: var(--shadow-lg);
-  color: var(--text-main);
+  border-radius: 24px;
+  padding: 2rem;
+  width: 100%; max-width: 500px;
 }
 
-.toast-container {
-  position: fixed;
-  bottom: 2rem;
-  right: 2rem;
-  z-index: 4000;
-  display: flex;
-  flex-direction: column;
-  gap: 0.8rem;
-}
-
-.toast {
-  background: var(--bg-secondary);
-  border: 1px solid var(--border-color);
-  padding: 1.1rem 1.4rem;
-  border-radius: var(--radius-md);
-  box-shadow: var(--shadow-md);
-  color: var(--text-main);
-  display: flex;
-  align-items: center;
-  gap: 0.85rem;
-  font-size: 0.92rem;
-  font-weight: 700;
-}
-
-/* RESPONSIVE */
-@media (max-width: 1024px) {
-  .dentistoire-hero-container {
-    grid-template-columns: 1fr;
-    text-align: center;
-  }
-  .hero-left-col {
-    align-items: center;
-  }
-  .dentistoire-banner-card {
-    grid-template-columns: repeat(2, 1fr);
-  }
-  .banner-col {
-    border-right: none;
-    border-bottom: 1px solid var(--border-color);
-    padding: 1.2rem 0;
-  }
-}
-
-@media (max-width: 768px) {
-  .header-container {
-    flex-direction: column;
-    gap: 1rem;
-  }
-  .dentistoire-banner-card {
-    grid-template-columns: 1fr;
-  }
-  .subject-grid {
-    grid-template-columns: 1fr;
-  }
-}
+.tab-content { display: none; }
+.tab-content.active { display: block; }
