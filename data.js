@@ -136,7 +136,7 @@ const DENTAL_SUBJECTS_TAXONOMY = [
       { id: "mb_s8", title: "complement system", summary: "Classical, lectin, and alternative complement pathways." },
       { id: "mb_s9", title: "Mycology", summary: "Candida albicans pathogenesis and oral candidiasis." },
       { id: "mb_s10", title: "Sterilization and Disinfection", summary: "Autoclaving parameters (121°C/15psi), chemical disinfectants, and indicators." },
-      { id: "mb_s11", title: "Bacterial genetic", title: "Plasmids, conjugation, transformation, and transduction." },
+      { id: "mb_s11", title: "Bacterial genetic", summary: "Plasmids, conjugation, transformation, and transduction." },
       { id: "mb_s12", title: "Virology", summary: "Herpes simplex virus (HSV), Hepatitis B (HBV), and HIV dental management." }
     ]
   },
@@ -194,8 +194,9 @@ DENTAL_SUBJECTS_TAXONOMY.forEach(sub => {
   });
 });
 
-// GLOBAL ALIAS FOR APP CONTROLLER
-const DENTISTOIRE_SUBJECTS = DENTAL_SUBJECTS_TAXONOMY;
+// EXPLICIT GLOBAL WINDOW BINDINGS
+window.DENTAL_SUBJECTS_TAXONOMY = DENTAL_SUBJECTS_TAXONOMY;
+window.DENTISTOIRE_SUBJECTS = DENTAL_SUBJECTS_TAXONOMY;
 "@
 
 [System.IO.File]::WriteAllText('C:\Users\us\.gemini\antigravity\scratch\lecture_quiz_app\data.js', $dataJsContent, [System.Text.Encoding]::UTF8)
