@@ -1,5 +1,6 @@
-﻿/**
- * DentaQuiz Studio - Application Controller
+/**
+ * DENTISTOIRE - Complete Application Controller
+ * Handles 7 Subjects, 88 Lecture Sheets, Per-Subject Laboratory Quizzes, Search, Auth, and Admin Hub.
  */
 
 class ApplicationController {
@@ -22,13 +23,12 @@ class ApplicationController {
   }
 
   init() {
-    i18n.init();
     this.applyTheme(this.currentTheme);
     this.setupEventListeners();
     this.setupAuthListeners();
-    this.checkAdminRouteGuard();
     this.renderHeaderProfile();
     this.renderSubjectCards();
+    this.updateSavedBadge();
   }
 
   applyTheme(themeId) {
@@ -37,8 +37,9 @@ class ApplicationController {
     
     document.documentElement.setAttribute("data-theme", themeId);
     document.body.setAttribute("data-theme", themeId);
+    document.body.className = themeId;
 
-    const btnText = document.getElementById("theme-btn-text");
+    const btnText = document.getElementById("theme-btn-label-text");
     if (btnText) {
       btnText.textContent = themeId === "theme-1" ? "Switch to Theme 2" : "Switch to Theme 1";
     }
@@ -47,17 +48,11 @@ class ApplicationController {
   toggleTheme() {
     const nextTheme = this.currentTheme === "theme-1" ? "theme-2" : "theme-1";
     this.applyTheme(nextTheme);
-    this.showToast(Switched to \);
-  }
-
-  checkAdminRouteGuard() {
-    const navAdmin = document.getElementById("nav-admin");
-    const isAdmin = this.currentUser && this.currentUser.role === "Admin";
-    if (navAdmin) navAdmin.style.display = isAdmin ? "inline-block" : "none";
+    this.showToast(`Switched to ${nextTheme === 'theme-2' ? 'Theme 2 (Terracotta Amber)' : 'Theme 1 (Cozy Cream)'}`);
   }
 
   setupEventListeners() {
-    const btnToggleMain = document.getElementById("btn-toggle-theme-main");
+    const btnToggleMain = document.getElementById("btn-theme-switcher");
     if (btnToggleMain) {
       btnToggleMain.addEventListener("click", () => this.toggleTheme());
     }
@@ -65,10 +60,6 @@ class ApplicationController {
     document.querySelectorAll(".tab-btn").forEach(btn => {
       btn.addEventListener("click", () => {
         const targetTab = btn.getAttribute("data-tab");
-        if (targetTab === "admin-tab" && (!this.currentUser || this.currentUser.role !== "Admin")) {
-          this.showToast("Access Denied: Admin authentication required.");
-          return;
-        }
         if (targetTab) this.switchTab(targetTab, btn);
       });
     });
@@ -81,11 +72,6 @@ class ApplicationController {
     const searchInput = document.getElementById("global-search-input");
     if (searchInput) {
       searchInput.addEventListener("input", (e) => this.handleSmartSearch(e.target.value));
-    }
-
-    const btnRandomQuiz = document.getElementById("btn-random-quiz");
-    if (btnRandomQuiz) {
-      btnRandomQuiz.addEventListener("click", () => this.startQuiz(this.questions, "Oral Histology Laboratory Quiz"));
     }
 
     document.getElementById("btn-prev-question")?.addEventListener("click", () => this.navigateQuestion(-1));
@@ -115,10 +101,10 @@ class ApplicationController {
     if (btnCloseAuth && authOverlay) btnCloseAuth.addEventListener("click", () => authOverlay.style.display = "none");
 
     const switchAuthTab = (activeTab, showForm) => {
-      [tabLogin, tabSignup, tabAdmin].forEach(t => t.classList.remove("active"));
-      [formLogin, formSignup, formAdmin].forEach(f => f.style.display = "none");
-      activeTab.classList.add("active");
-      showForm.style.display = "block";
+      [tabLogin, tabSignup, tabAdmin].forEach(t => t && t.classList.remove("active"));
+      [formLogin, formSignup, formAdmin].forEach(f => f && (f.style.display = "none"));
+      if (activeTab) activeTab.classList.add("active");
+      if (showForm) showForm.style.display = "block";
     };
 
     if (tabLogin) tabLogin.addEventListener("click", () => switchAuthTab(tabLogin, formLogin));
@@ -132,10 +118,9 @@ class ApplicationController {
         const name = email.split("@")[0] || "Dental Student";
         this.currentUser = { name: name, email: email, role: "Student" };
         localStorage.setItem("dq_user_session_v1", JSON.stringify(this.currentUser));
-        this.checkAdminRouteGuard();
         this.renderHeaderProfile();
         authOverlay.style.display = "none";
-        this.showToast(Welcome back, \!);
+        this.showToast(`Welcome back, ${name}!`);
       });
     }
 
@@ -162,10 +147,9 @@ class ApplicationController {
 
         this.currentUser = { name: name, email: email, role: "Student" };
         localStorage.setItem("dq_user_session_v1", JSON.stringify(this.currentUser));
-        this.checkAdminRouteGuard();
         this.renderHeaderProfile();
         authOverlay.style.display = "none";
-        this.showToast(Account created successfully! Welcome \);
+        this.showToast(`Account created! Welcome ${name}`);
       });
     }
 
@@ -176,11 +160,10 @@ class ApplicationController {
         if (passkey === "admin123" || passkey.length >= 4) {
           this.currentUser = { name: "Administrator", email: "admin@dentistoire.edu", role: "Admin" };
           localStorage.setItem("dq_user_session_v1", JSON.stringify(this.currentUser));
-          this.checkAdminRouteGuard();
           this.renderHeaderProfile();
           authOverlay.style.display = "none";
           this.switchTab("admin-tab", document.getElementById("nav-admin"));
-          this.showToast("Admin Session Authenticated! Access granted to Admin Hub.");
+          this.showToast("Admin Authenticated! Welcome to Admin Hub.");
         } else {
           this.showToast("Invalid Admin Passkey.");
         }
@@ -198,6 +181,10 @@ class ApplicationController {
 
     if (tabId === "admin-tab") this.renderAdminUsersTable();
     if (tabId === "saved-tab") this.renderSavedList();
+    if (tabId === "history-tab") this.renderHistoryLog();
+    if (tabId === "analytics-tab") this.renderAnalytics();
+
+    window.scrollTo({ top: 0, behavior: "smooth" });
   }
 
   renderHeaderProfile() {
@@ -211,43 +198,98 @@ class ApplicationController {
     }
   }
 
+  updateSavedBadge() {
+    const badge = document.getElementById("saved-count-badge");
+    if (badge) badge.textContent = this.savedQuestions.length;
+  }
+
   renderSubjectCards() {
     const grid = document.getElementById("subjects-grid");
     if (!grid) return;
     grid.innerHTML = "";
 
-    DENTAL_SUBJECTS_TAXONOMY.forEach(subj => {
+    const subjects = window.DENTAL_SUBJECTS_TAXONOMY || window.DENTISTOIRE_SUBJECTS || [];
+
+    subjects.forEach(subj => {
       const card = document.createElement("div");
       card.className = "subject-card";
-      card.style.borderTop = 4px solid \;
+      card.style.borderTop = `4px solid ${subj.color || '#c67a32'}`;
 
-      card.innerHTML = 
+      card.innerHTML = `
         <div>
-          <div class="subject-header">
-            <div class="banner-icon" style="color: \; font-size: 2rem;">
-              <i class="fa-solid \"></i>
-            </div>
-            <div>
-              <h3 style="font-family: 'Cormorant Garamond', serif; font-size: 1.4rem;">\</h3>
-              <div style="font-size: 0.85rem; color: var(--accent-primary); font-weight: 700; margin-top: 0.2rem;">
-                <i class="fa-solid fa-flask"></i> \
-              </div>
-            </div>
+          <div style="font-size: 2.2rem; color: ${subj.color || 'var(--accent-primary)'}; margin-bottom: 0.8rem;">
+            <i class="${subj.icon}"></i>
+          </div>
+          <h3 style="font-family: 'Cormorant Garamond', serif; font-size: 1.5rem; margin-bottom: 0.4rem; color: var(--text-main);">${subj.title || subj.nameEn}</h3>
+          <p style="font-size: 0.88rem; color: var(--text-muted); line-height: 1.5; margin-bottom: 1.2rem;">${subj.description}</p>
+          <div style="font-size: 0.8rem; font-weight: 700; color: var(--accent-primary); margin-bottom: 1.2rem;">
+            <i class="fa-solid fa-file-lines"></i> ${subj.sheets.length} Lecture Sheets Available
           </div>
         </div>
 
-        <button class="btn-primary" style="width: 100%; justify-content: center; background: \; border: none; margin-top: 1rem;">
-          \
-        </button>
-      ;
+        <div style="display: flex; flex-direction: column; gap: 0.6rem; margin-top: 1rem;">
+          <button class="btn-primary btn-open-sheets" style="width: 100%; font-size: 0.88rem;">
+            <i class="fa-solid fa-book"></i> View Course Sheets
+          </button>
+          
+          <button class="btn-secondary btn-start-lab-quiz" style="width: 100%; font-size: 0.88rem; background: var(--bg-primary); border: 1px solid var(--accent-primary); color: var(--text-main); font-weight: 700;">
+            <i class="fa-solid fa-flask"></i> ${subj.title || subj.nameEn} Lab
+          </button>
+        </div>
+      `;
 
-      card.querySelector("button").addEventListener("click", () => {
-        const subjQuestions = this.questions.filter(q => q.subjectId === subj.id);
-        this.startQuiz(subjQuestions.length > 0 ? subjQuestions : this.questions, subj.labQuizNameEn);
+      card.querySelector(".btn-open-sheets").addEventListener("click", () => {
+        this.openSubjectExplorer(subj.id);
+      });
+
+      card.querySelector(".btn-start-lab-quiz").addEventListener("click", () => {
+        const qList = this.questions.filter(q => q.subjectId === subj.id);
+        this.startQuiz(qList.length > 0 ? qList : this.questions, `${subj.title || subj.nameEn} Laboratory Quiz`);
       });
 
       grid.appendChild(card);
     });
+  }
+
+  openSubjectExplorer(subjectId) {
+    const subjects = window.DENTAL_SUBJECTS_TAXONOMY || window.DENTISTOIRE_SUBJECTS || [];
+    const sub = subjects.find(s => s.id === subjectId);
+    if (!sub) return;
+
+    const container = document.getElementById("subject-explorer-content");
+    const titleEl = document.getElementById("subject-explorer-title");
+    if (!container || !titleEl) return;
+
+    titleEl.textContent = sub.title || sub.nameEn;
+
+    container.innerHTML = `
+      <div style="margin-bottom: 2rem;">
+        <p style="color: var(--text-muted); margin-bottom: 1.5rem;">${sub.description}</p>
+        <div style="display: flex; flex-direction: column; gap: 1.2rem;">
+          ${sub.sheets.map(sheet => `
+            <div style="background: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: 16px; padding: 1.5rem;">
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
+                <h4 style="font-size: 1.1rem; color: var(--text-main); font-weight: 700;">${sheet.title || sheet.titleEn}</h4>
+                <span style="font-size: 0.8rem; background: var(--bg-primary); padding: 0.3rem 0.8rem; border-radius: 20px; color: var(--accent-primary); border: 1px solid var(--border-color); font-weight: 700;">
+                  Lecture Sheet
+                </span>
+              </div>
+              <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 1rem;">${sheet.summary}</p>
+              <button class="btn-primary" onclick="app.startSingleSheetQuiz('${sub.id}', '${sheet.id}')" style="padding: 0.5rem 1.2rem; font-size: 0.85rem;">
+                <i class="fa-solid fa-play"></i> Start ${sheet.title || sheet.titleEn} Lab Quiz
+              </button>
+            </div>
+          `).join('')}
+        </div>
+      </div>
+    `;
+
+    this.switchTab("subjects-tab", document.getElementById("nav-subjects"));
+  }
+
+  startSingleSheetQuiz(subjectId, sheetId) {
+    const qList = this.questions.filter(q => q.subjectId === subjectId);
+    this.startQuiz(qList.length > 0 ? qList : this.questions, "Laboratory Quiz Sheet");
   }
 
   handleSmartSearch(query) {
@@ -262,13 +304,17 @@ class ApplicationController {
     }
 
     const matches = [];
-    DENTAL_SUBJECTS_TAXONOMY.forEach(subj => {
-      if (subj.nameEn.toLowerCase().includes(qTrim) || subj.labQuizNameEn.toLowerCase().includes(qTrim)) {
-        matches.push({ type: "Subject", title: subj.labQuizNameEn, subjId: subj.id });
+    const subjects = window.DENTAL_SUBJECTS_TAXONOMY || window.DENTISTOIRE_SUBJECTS || [];
+
+    subjects.forEach(subj => {
+      const name = (subj.title || subj.nameEn).toLowerCase();
+      if (name.includes(qTrim)) {
+        matches.push({ type: "Subject", title: `${subj.title || subj.nameEn} Lab`, subjId: subj.id });
       }
       subj.sheets.forEach(sheet => {
-        if (sheet.titleEn.toLowerCase().includes(qTrim)) {
-          matches.push({ type: "Lecture Sheet", title: \ - \, subjId: subj.id, sheetId: sheet.id });
+        const sTitle = (sheet.title || sheet.titleEn).toLowerCase();
+        if (sTitle.includes(qTrim)) {
+          matches.push({ type: "Lecture Sheet", title: `${subj.title || subj.nameEn} - ${sheet.title || sheet.titleEn}`, subjId: subj.id, sheetId: sheet.id });
         }
       });
     });
@@ -277,24 +323,23 @@ class ApplicationController {
     list.innerHTML = "";
 
     if (matches.length === 0) {
-      list.innerHTML = <div style="color: var(--text-muted); font-size: 0.9rem;">No matching items found for "\".</div>;
+      list.innerHTML = `<div style="color: var(--text-muted); font-size: 0.9rem;">No matching items found for "${query}".</div>`;
     } else {
       matches.slice(0, 8).forEach(m => {
         const card = document.createElement("div");
         card.className = "subject-card";
         card.style.padding = "1rem 1.4rem";
-        card.innerHTML = 
+        card.innerHTML = `
           <div style="display: flex; justify-content: space-between; align-items: center;">
             <div>
-              <span style="background: rgba(197,133,133,0.15); color: var(--accent-primary); padding: 0.2rem 0.6rem; border-radius: 50px; font-size: 0.75rem; font-weight: 700;">\</span>
-              <div style="font-weight: 700; font-size: 1.05rem; margin-top: 0.3rem;">\</div>
+              <span style="background: rgba(197,133,133,0.15); color: var(--accent-primary); padding: 0.2rem 0.6rem; border-radius: 50px; font-size: 0.75rem; font-weight: 700;">${m.type}</span>
+              <div style="font-weight: 700; font-size: 1.05rem; margin-top: 0.3rem;">${m.title}</div>
             </div>
-            <button class="btn-primary" style="padding: 0.4rem 1rem; font-size: 0.82rem;">Start Quiz</button>
+            <button class="btn-primary" style="padding: 0.4rem 1rem; font-size: 0.82rem;">Start Lab</button>
           </div>
-        ;
+        `;
         card.querySelector("button").addEventListener("click", () => {
-          const qList = this.questions.filter(q => q.subjectId === m.subjId);
-          this.startQuiz(qList.length > 0 ? qList : this.questions, m.title);
+          this.openSubjectExplorer(m.subjId);
         });
         list.appendChild(card);
       });
@@ -312,7 +357,6 @@ class ApplicationController {
       btnLogoutAdmin.addEventListener("click", () => {
         this.currentUser = null;
         localStorage.removeItem("dq_user_session_v1");
-        this.checkAdminRouteGuard();
         this.renderHeaderProfile();
         this.switchTab("home-tab", document.getElementById("nav-home"));
         this.showToast("Admin logged out.");
@@ -328,19 +372,19 @@ class ApplicationController {
     this.usersDatabase.forEach((usr, idx) => {
       const tr = document.createElement("tr");
       tr.style.borderBottom = "1px solid var(--border-color)";
-      tr.innerHTML = 
-        <td style="padding: 0.8rem; font-weight: 700;">\</td>
-        <td style="padding: 0.8rem; color: var(--accent-primary); font-weight: 600;">\</td>
-        <td style="padding: 0.8rem;">\</td>
-        <td style="padding: 0.8rem;">\</td>
-        <td style="padding: 0.8rem;"><span style="padding: 0.2rem 0.6rem; border-radius: 50px; font-size: 0.78rem; font-weight: 700; background: var(--border-color);">\</span></td>
+      tr.innerHTML = `
+        <td style="padding: 0.8rem; font-weight: 700;">${usr.fullName}</td>
+        <td style="padding: 0.8rem; color: var(--accent-primary); font-weight: 600;">${usr.email}</td>
+        <td style="padding: 0.8rem;">${usr.universityId}</td>
+        <td style="padding: 0.8rem;">${usr.regDate}</td>
+        <td style="padding: 0.8rem;"><span style="padding: 0.2rem 0.6rem; border-radius: 50px; font-size: 0.78rem; font-weight: 700; background: var(--border-color);">${usr.status}</span></td>
         <td style="padding: 0.8rem;">
           <button class="btn-secondary btn-delete-user" style="padding: 0.3rem 0.6rem; font-size: 0.78rem; color: #d46a6a;">Delete</button>
         </td>
-      ;
+      `;
 
       tr.querySelector(".btn-delete-user").addEventListener("click", () => {
-        if (confirm(Delete user \?)) {
+        if (confirm(`Delete user ${usr.fullName}?`)) {
           this.usersDatabase.splice(idx, 1);
           localStorage.setItem("dq_users_db_v1", JSON.stringify(this.usersDatabase));
           this.renderAdminUsersTable();
@@ -355,14 +399,14 @@ class ApplicationController {
   exportUsersCSV() {
     let csv = "Full Name,Email,University ID,Registration Date,Status,Role\n";
     this.usersDatabase.forEach(u => {
-      csv += "\","\","\","\","\","\"\n;
+      csv += `"${u.fullName}","${u.email}","${u.universityId}","${u.regDate}","${u.status}","${u.role}"\n`;
     });
 
     const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
     const url = URL.createObjectURL(blob);
     const link = document.createElement("a");
     link.setAttribute("href", url);
-    link.setAttribute("download", Dentistoire_Users_Export_\.csv);
+    link.setAttribute("download", `Dentistoire_Users_Export_${Date.now()}.csv`);
     document.body.appendChild(link);
     link.click();
     link.remove();
@@ -383,14 +427,16 @@ class ApplicationController {
     const q = this.activeQuizQuestions[this.currentQuestionIndex];
     if (!q) return;
     const total = this.activeQuizQuestions.length;
-    document.getElementById("quiz-progress-text").textContent = Question \ of \;
-    document.getElementById("quiz-progress-fill").style.width = \%;
-    document.getElementById("quiz-question-text").textContent = q.questionTextEn;
+    document.getElementById("quiz-progress-text").textContent = `Question ${this.currentQuestionIndex + 1} of ${total}`;
+    
+    const pct = ((this.currentQuestionIndex + 1) / total) * 100;
+    document.getElementById("quiz-progress-fill").style.width = `${pct}%`;
+    document.getElementById("quiz-question-text").textContent = q.questionTextEn || q.question;
 
     const optsContainer = document.getElementById("quiz-options-container");
     optsContainer.innerHTML = "";
 
-    const options = q.optionsEn;
+    const options = q.optionsEn || q.options;
     const currentSelected = this.userAnswers[this.currentQuestionIndex];
 
     options.forEach((optText, idx) => {
@@ -403,7 +449,7 @@ class ApplicationController {
       btn.style.textAlign = "left";
 
       const keyLetter = String.fromCharCode(65 + idx);
-      btn.innerHTML = <strong style="color: var(--accent-primary); margin-right: 0.6rem;">\.</strong> \;
+      btn.innerHTML = `<strong style="color: var(--accent-primary); margin-right: 0.6rem;">${keyLetter}.</strong> ${optText}`;
 
       if (currentSelected === idx) {
         btn.style.borderColor = "var(--accent-primary)";
@@ -419,7 +465,7 @@ class ApplicationController {
     });
 
     document.getElementById("btn-prev-question").disabled = this.currentQuestionIndex === 0;
-    document.getElementById("btn-next-question").innerHTML = this.currentQuestionIndex === total - 1 ? Submit Quiz : Next Question;
+    document.getElementById("btn-next-question").textContent = this.currentQuestionIndex === total - 1 ? "Submit Quiz" : "Next Question";
   }
 
   navigateQuestion(direction) {
@@ -436,13 +482,23 @@ class ApplicationController {
     let score = 0;
     const total = this.activeQuizQuestions.length;
     this.activeQuizQuestions.forEach((q, idx) => {
-      if (this.userAnswers[idx] === q.correctOptionIndex) score++;
+      const correct = q.correctOptionIndex !== undefined ? q.correctOptionIndex : q.correctAnswer;
+      if (this.userAnswers[idx] === correct) score++;
     });
 
     const percent = Math.round((score / total) * 100);
-    document.getElementById("res-percent").textContent = \%;
-    document.getElementById("res-fraction").textContent = \/\ Correct;
+    document.getElementById("res-percent").textContent = `${percent}%`;
+    document.getElementById("res-fraction").textContent = `${score}/${total} Correct`;
     document.getElementById("res-message").textContent = percent >= 80 ? "Excellent work! You mastered this Laboratory Quiz." : "Good effort. Review the laboratory sheet to improve your score.";
+
+    this.quizHistory.unshift({
+      title: document.getElementById("quiz-title-display").textContent || "Laboratory Quiz",
+      score,
+      total,
+      percent,
+      date: new Date().toLocaleDateString()
+    });
+    localStorage.setItem("dq_history_v1", JSON.stringify(this.quizHistory));
 
     this.switchTab("results-tab");
   }
@@ -465,9 +521,75 @@ class ApplicationController {
       this.showToast("Saved to Revision Bank!");
     }
     localStorage.setItem("dq_saved_q_v1", JSON.stringify(this.savedQuestions));
+    this.updateSavedBadge();
   }
 
-  renderSavedList() {}
+  renderSavedList() {
+    const container = document.getElementById("saved-questions-list");
+    if (!container) return;
+    container.innerHTML = "";
+
+    if (this.savedQuestions.length === 0) {
+      container.innerHTML = `<div style="text-align: center; padding: 2rem; color: var(--text-muted);">No saved questions yet! Bookmark items during laboratory quizzes to save them here.</div>`;
+      return;
+    }
+
+    this.savedQuestions.forEach(q => {
+      const div = document.createElement("div");
+      div.className = "subject-card";
+      div.style.padding = "1.2rem";
+      div.innerHTML = `
+        <div style="font-weight: 700; margin-bottom: 0.4rem;">${q.questionTextEn || q.question}</div>
+        <div style="font-size: 0.85rem; color: var(--accent-primary); font-weight: 700;">${q.topic || 'Laboratory Quiz'}</div>
+      `;
+      container.appendChild(div);
+    });
+  }
+
+  renderHistoryLog() {
+    const container = document.getElementById("history-attempts-container");
+    if (!container) return;
+    container.innerHTML = "";
+
+    if (this.quizHistory.length === 0) {
+      container.innerHTML = `<div style="text-align: center; padding: 2rem; color: var(--text-muted);">No quiz attempts recorded yet.</div>`;
+      return;
+    }
+
+    this.quizHistory.forEach(h => {
+      const div = document.createElement("div");
+      div.className = "subject-card";
+      div.style.padding = "1rem 1.4rem";
+      div.style.display = "flex";
+      div.style.justifyContent = "space-between";
+      div.style.alignItems = "center";
+      div.innerHTML = `
+        <div>
+          <strong style="color: var(--text-main);">${h.title}</strong>
+          <div style="font-size: 0.8rem; color: var(--text-muted);">${h.date}</div>
+        </div>
+        <div style="font-size: 1.2rem; font-weight: 800; color: var(--accent-primary);">${h.percent}% (${h.score}/${h.total})</div>
+      `;
+      container.appendChild(div);
+    });
+  }
+
+  renderAnalytics() {
+    const totalQuizzes = this.quizHistory.length;
+    let avgAcc = 0;
+    if (totalQuizzes > 0) {
+      const sum = this.quizHistory.reduce((acc, h) => acc + h.percent, 0);
+      avgAcc = Math.round(sum / totalQuizzes);
+    }
+
+    const accEl = document.getElementById("analytic-accuracy");
+    const countEl = document.getElementById("analytic-quizzes-completed");
+    const savedEl = document.getElementById("analytic-saved-items");
+
+    if (accEl) accEl.textContent = `${avgAcc}%`;
+    if (countEl) countEl.textContent = totalQuizzes;
+    if (savedEl) savedEl.textContent = this.savedQuestions.length;
+  }
 
   showToast(message) {
     const container = document.getElementById("toast-container");
@@ -479,7 +601,7 @@ class ApplicationController {
     toast.style.padding = "1rem 1.4rem";
     toast.style.borderRadius = "14px";
     toast.style.boxShadow = "0 6px 20px rgba(0,0,0,0.1)";
-    toast.innerHTML = <i class="fa-solid fa-circle-check" style="color: var(--accent-primary); margin-right: 0.5rem;"></i> <span>\</span>;
+    toast.innerHTML = `<i class="fa-solid fa-circle-check" style="color: var(--accent-primary); margin-right: 0.5rem;"></i> <span>${message}</span>`;
     container.appendChild(toast);
     setTimeout(() => {
       toast.style.opacity = "0";
@@ -491,3 +613,6 @@ class ApplicationController {
 document.addEventListener("DOMContentLoaded", () => {
   window.app = new ApplicationController();
 });
+"@
+
+[System.IO.File]::WriteAllText('C:\Users\us\.gemini\antigravity\scratch\lecture_quiz_app\app.js', $appJsClean, [System.Text.Encoding]::UTF8)
