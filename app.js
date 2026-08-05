@@ -490,11 +490,15 @@ class ApplicationController {
   }
 
   startQuiz(questionsList, quizTitle = "Laboratory Quiz") {
-    if (!questionsList || questionsList.length === 0) return;
+    if (!questionsList || questionsList.length === 0) {
+      this.showToast("No quiz questions available for this sheet yet. Please check back later!");
+      return;
+    }
     this.activeQuizQuestions = [...questionsList];
     this.currentQuestionIndex = 0;
     this.userAnswers = {};
-    document.getElementById("quiz-title-display").textContent = quizTitle;
+    const titleEl = document.getElementById("quiz-title-display");
+    if (titleEl) titleEl.textContent = quizTitle;
     this.switchTab("quiz-tab");
     this.renderCurrentQuestion();
   }
@@ -659,13 +663,18 @@ class ApplicationController {
       avgAcc = Math.round(sum / totalQuizzes);
     }
 
+    // Count weak topics: quiz attempts with score below 60%
+    const weakCount = this.quizHistory.filter(h => h.percent < 60).length;
+
     const accEl = document.getElementById("analytic-accuracy");
     const countEl = document.getElementById("analytic-quizzes-completed");
     const savedEl = document.getElementById("analytic-saved-items");
+    const weakEl = document.getElementById("analytic-weak-topics-count");
 
     if (accEl) accEl.textContent = `${avgAcc}%`;
     if (countEl) countEl.textContent = totalQuizzes;
     if (savedEl) savedEl.textContent = this.savedQuestions.length;
+    if (weakEl) weakEl.textContent = weakCount;
   }
 
   showToast(message) {
@@ -689,6 +698,3 @@ class ApplicationController {
 
 // INSTANT GLOBAL INSTANTIATION
 window.app = new ApplicationController();
-"@
-
-[System.IO.File]::WriteAllText('C:\Users\us\.gemini\antigravity\scratch\lecture_quiz_app\app.js', $appJsMultiFilter, [System.Text.Encoding]::UTF8)

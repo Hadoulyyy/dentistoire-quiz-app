@@ -197,6 +197,3 @@ DENTAL_SUBJECTS_TAXONOMY.forEach(sub => {
 // EXPLICIT GLOBAL WINDOW BINDINGS
 window.DENTAL_SUBJECTS_TAXONOMY = DENTAL_SUBJECTS_TAXONOMY;
 window.DENTISTOIRE_SUBJECTS = DENTAL_SUBJECTS_TAXONOMY;
-"@
-
-[System.IO.File]::WriteAllText('C:\Users\us\.gemini\antigravity\scratch\lecture_quiz_app\data.js', $dataJsClean, [System.Text.Encoding]::UTF8)
