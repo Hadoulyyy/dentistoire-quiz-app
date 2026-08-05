@@ -1,4 +1,4 @@
-﻿/* ==========================================================================
+/* ==========================================================================
    DENTISTOIRE - PRODUCTION MULTI-THEME ENGINE (v639214660402863207)
    ========================================================================== */
 
@@ -32,14 +32,14 @@ body.theme-2 {
   ) !important;
   background-attachment: fixed !important;
   color: #1d130a !important;
-  --bg-primary: #e8d3b7;
-  --bg-secondary: #24170d;
-  --border-color: #523b2b;
+  --bg-primary: #fdf5ec;
+  --bg-secondary: #fdf5ec;
+  --border-color: #d4b896;
   --text-main: #1d130a;
-  --text-muted: #4e3522;
+  --text-muted: #6b4c35;
   --accent-primary: #c67a32;
-  --banner-bg: #24170d;
-  --banner-border: #3d2919;
+  --banner-bg: #fdf5ec;
+  --banner-border: #d4b896;
 }
 
 body.theme-2 header {
@@ -113,10 +113,10 @@ body.theme-2 .dentistoire-hero-container {
 }
 
 body.theme-2 .dentistoire-banner-card {
-  background: #24170d !important;
-  border: 1px solid #3d2919 !important;
+  background: #fdf5ec !important;
+  border: 1px solid #d4b896 !important;
   border-radius: 14px !important;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.3) !important;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.15) !important;
 }
 
 body.theme-2 .banner-title {
@@ -126,7 +126,7 @@ body.theme-2 .banner-title {
 }
 
 body.theme-2 .banner-text {
-  color: #c4b0a0 !important;
+  color: #6b4c35 !important;
 }
 
 body.theme-2 .banner-icon {
@@ -134,9 +134,9 @@ body.theme-2 .banner-icon {
 }
 
 body.theme-2 .subject-card {
-  background: #24170d !important;
-  border: 1px solid #422d1d !important;
-  color: #f5e8dd !important;
+  background: #fdf5ec !important;
+  border: 1px solid #d4b896 !important;
+  color: #1d130a !important;
 }
 
 /* CORE BASE LAYOUT */
