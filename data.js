@@ -199,4 +199,4 @@ window.DENTAL_SUBJECTS_TAXONOMY = DENTAL_SUBJECTS_TAXONOMY;
 window.DENTISTOIRE_SUBJECTS = DENTAL_SUBJECTS_TAXONOMY;
 "@
 
-[System.IO.File]::WriteAllText('C:\Users\us\.gemini\antigravity\scratch\lecture_quiz_app\data.js', $dataJsContent, [System.Text.Encoding]::UTF8)
+[System.IO.File]::WriteAllText('C:\Users\us\.gemini\antigravity\scratch\lecture_quiz_app\data.js', $dataJsClean, [System.Text.Encoding]::UTF8)
